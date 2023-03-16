@@ -1,4 +1,4 @@
-package domain;
+package com.project.gamelibrary.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -20,7 +20,7 @@ public class BoardCategory {
     @OneToOne(fetch = LAZY)
     private Game game;
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "boardCategory")
     private List<Board> board = new ArrayList<>();
 
     private LocalDateTime createDate;

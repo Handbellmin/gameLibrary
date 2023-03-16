@@ -1,4 +1,4 @@
-package domain;
+package com.project.gamelibrary.domain;
 
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
@@ -10,7 +10,9 @@ public class Address {
     private String street;
     private String zipcode;
 
-    public Adderss(String city, String street, String zipcode) {
+    protected Address() {}
+
+    public Address(String city, String street, String zipcode) {
         this.city = city;
         this.street = street;
         this.zipcode = zipcode;

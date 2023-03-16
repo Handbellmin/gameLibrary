@@ -1,9 +1,8 @@
-package domain;
+package com.project.gamelibrary.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,9 +23,9 @@ public class Board {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name="boardCategory_id")
-    private BoardCategory category;
+    private BoardCategory boardCategory;
 
-    @OneToMany(mappedBy = "boardComment")
+    @OneToMany(mappedBy = "board")
     private List<BoardComment> boardCommentList = new ArrayList<>();
 
     private String ttl;
@@ -40,6 +39,26 @@ public class Board {
     private LocalDateTime updateDate;
 
     private String popupYn;
+
+    //==연관관계 메서드 ==//
+    public void setBoardCategory(BoardCategory boardCategory) {
+        this.boardCategory = boardCategory;
+        boardCategory.getBoard().add(this);
+    }
+    public void setUser(User user) {
+        this.user = user;
+        user.getBoardList().add(this);
+    }
+    //==생성 메서드 ==//
+    /*public static class Bulider {
+        private final User user;
+        private final BoardCategory category;
+        private final
+
+    }*/
+
+
+
 
 
 }

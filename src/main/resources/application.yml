@@ -7,7 +7,7 @@ servlet:
 
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/project/gamelibrary;
+    url: jdbc:h2:tcp://localhost/~/study/gameLibrary;
     username : sa
     password :
     driver-class-name: org.h2.Driver
