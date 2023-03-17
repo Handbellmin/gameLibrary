@@ -42,14 +42,14 @@ public class Game {
 
 
     //==연관관계 메서드==//
-/*    public void setCategory(Category category) {
+    public void setCategory(Category category) {
         this.category = category;
-        category.getGameLis\t().add(this);
+        category.getGameList().add(this);
     }
     public void setBoardCategory(BoardCategory boardCategory) {
         this.boardCategory = boardCategory;
         boardCategory.setGame(this);
-    }*/
+    }
 
     //==생성 메서드 ==//
     public static class Builder {

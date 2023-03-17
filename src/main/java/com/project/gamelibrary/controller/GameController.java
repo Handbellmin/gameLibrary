@@ -45,8 +45,24 @@ public class GameController {
                 .setGameDescription(gameForm.getGameDescription())
                 .build();
         gameService.gameSave(game);
-        log.info(game.getGameName());
-        log.info(game.getGameDescription());
+
+        return "redirect:/games";
+    }
+
+    @GetMapping("/games/edit")
+    public String edit(Long gameId, Model model) {
+        model.addAttribute(gameService.findOne(gameId));
+        return "games/editGameForm";
+    }
+
+    @PostMapping("/games/edit")
+    public String edit(GameForm gameForm) {
+        Game game = new Game.Builder(gameForm.getGameName())
+                .setGamePrice(gameForm.getGamePrice())
+                .setGameSatis(gameForm.getGameSatis())
+                .setGameDescription(gameForm.getGameDescription())
+                .build();
+        gameService.gameSave(game);
 
         return "redirect:/games";
     }

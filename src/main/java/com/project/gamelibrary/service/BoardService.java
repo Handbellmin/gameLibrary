@@ -16,7 +16,7 @@ public class BoardService {
 
     public void saveBoard(Board board) {boardRepository.save(board);}
 
-    public List<Board> findBoard() {
+    public List<Board> findAll() {
         return boardRepository.findAll();
     }
     public Board findOne(Long boardId) {
