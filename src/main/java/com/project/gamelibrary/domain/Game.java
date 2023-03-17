@@ -39,24 +39,17 @@ public class Game {
 
     private String gameDescription;
 
-    protected Game() {}
 
-    public Game(Builder builder) {
-        this.gameName = builder.gameName;
-        this.gamePrice = builder.gamePrice;
-        this.gameSatis = builder.gameSatis;
-        this.gameDescription = builder.gameDescription;
-    }
 
     //==연관관계 메서드==//
-    public void setCategory(Category category) {
+/*    public void setCategory(Category category) {
         this.category = category;
-        category.getGameList().add(this);
+        category.getGameLis\t().add(this);
     }
     public void setBoardCategory(BoardCategory boardCategory) {
         this.boardCategory = boardCategory;
         boardCategory.setGame(this);
-    }
+    }*/
 
     //==생성 메서드 ==//
     public static class Builder {
@@ -86,5 +79,12 @@ public class Game {
             return new Game(this);
         }
     }
+    protected Game() {}
 
+    private Game(Builder builder) {
+        this.gameName = builder.gameName;
+        this.gamePrice = builder.gamePrice;
+        this.gameSatis = builder.gameSatis;
+        this.gameDescription = builder.gameDescription;
+    }
 }

@@ -13,7 +13,8 @@ public class GameRepository {
     private final EntityManager em;
 
     public void save(Game game) {
-        em.persist(this);
+        System.out.println("----------------save -------------");
+        em.persist(game);
     }
 
     public Game findOne(Long id) {
