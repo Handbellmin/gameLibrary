@@ -67,29 +67,24 @@ public class GameController {
         return "redirect:/games";
     }
 
-    @PostMapping("/games/receive")
-    public void receiveGames() {
-        String url = "https://store.steampowered.com/";
+    @GetMapping("/games/receive")
+    public String receiveGames() {
+        //액션 카테고리 크롤링
+        String url = "https://store.steampowered.com/category/action/?snr=1_5_9__12";
         try {
             // Steam 사이트 접속하기
             Document doc = Jsoup.connect(url).get();
 
             // 인기 라이브러리 목록 가져오기
-            Elements popularLibraries  = doc.select("div#tab_popular_new_releases div.tab_content_ctn a");
+            Elements actiongame  = doc.select("#SaleSection_13268 > div.partnersaledisplay_SaleSection_2NfLq.eventbbcodeparser_SaleSectionCtn_2Xrw_.SaleSectionForCustomCSS");
+
+            Element link = actiongame.select("a").first();
 
             // 인기 라이브러리 출력하기
-            System.out.println("Popular Libraries:");
-            for (Element library : popularLibraries) {
-                String title = library.select("div.tab_item_name").text();
-                String price = library.select("div.discounted").text();
-                if (price.isEmpty()) {
-                    price = library.select("div.tab_item_price").text();
-                }
-                System.out.println(title + " - " + price);
-            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        return "home";
     }
 }

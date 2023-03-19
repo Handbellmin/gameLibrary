@@ -17,13 +17,13 @@ public class Board {
     @Column(name="board_id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name="boardCategory_id")
     private BoardCategory boardCategory;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name="user_id")
+    private User user;
 
     @OneToMany(mappedBy = "board")
     private List<BoardComment> boardCommentList = new ArrayList<>();
@@ -45,18 +45,36 @@ public class Board {
         this.boardCategory = boardCategory;
         boardCategory.getBoard().add(this);
     }
-    public void setUser(User user) {
-        this.user = user;
-        user.getBoardList().add(this);
-    }
     //==생성 메서드 ==//
-    /*public static class Bulider {
-        private final User user;
-        private final BoardCategory category;
-        private final
+    public static class Builder {
+        private final String ttl;
+        private final String content;
+        private final String createId;
+        private final String PopupYn;
 
-    }*/
+        private final LocalDateTime createDate;
 
+
+        public Builder( String ttl, String content, String createId, String popupYn, LocalDateTime createDate) {
+            this.ttl = ttl;
+            this.content = content;
+            this.createId = createId;
+            this.PopupYn = popupYn;
+            this.createDate = createDate;
+        }
+
+        public Board build() { return new Board(this);}
+
+    }
+    protected Board() {}
+    private Board(Builder builder) {
+        this.ttl = builder.ttl;
+        this.content = builder.content;
+        this.createId = builder.createId;
+        this.createDate = builder.createDate;
+    }
+
+    //== 비즈니스 로직 ==//
 
 
 
