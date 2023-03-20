@@ -2,7 +2,9 @@ package com.project.gamelibrary.controller;
 
 import com.project.gamelibrary.Form.BoardForm;
 import com.project.gamelibrary.domain.Board;
+import com.project.gamelibrary.domain.BoardComment;
 import com.project.gamelibrary.service.BoardCategoryService;
+import com.project.gamelibrary.service.BoardCommentService;
 import com.project.gamelibrary.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
+    private final BoardCommentService boardCommentService;
     private final BoardCategoryService boardCategoryService;
 
     @GetMapping("/boards")
@@ -52,6 +55,10 @@ public class BoardController {
     @GetMapping("/boards/{id}/detail")
     public String detail(@PathVariable ("id") Long BoardId, Model model) {
         Board board = boardService.findOne(BoardId);
+        List<BoardComment> boardComments = boardCommentService.findByBoardId(BoardId);
+
+        model.addAttribute("board", board);
+        model.addAttribute("boardComments", boardComments);
 
         return "/boards/details";
     }

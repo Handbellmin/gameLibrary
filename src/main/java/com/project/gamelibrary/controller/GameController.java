@@ -70,13 +70,14 @@ public class GameController {
     @GetMapping("/games/receive")
     public String receiveGames() {
         //액션 카테고리 크롤링
-        String url = "https://store.steampowered.com/category/action/?snr=1_5_9__12";
+        String string_ID = "76561197960265728";
+        String url = "https://store.steampowered.com/charts/topselling/KR";
         try {
             // Steam 사이트 접속하기
             Document doc = Jsoup.connect(url).get();
 
             // 인기 라이브러리 목록 가져오기
-            Elements actiongame  = doc.select("#SaleSection_13268 > div.partnersaledisplay_SaleSection_2NfLq.eventbbcodeparser_SaleSectionCtn_2Xrw_.SaleSectionForCustomCSS");
+            Elements actiongame  = doc.select("#application_root > div > div > div > div > div.weeklytopsellers_ChartPlaceholder_3sJkw > table > tbody > tr:nth-child(1) > td.weeklytopsellers_CapsuleCell_18kGH > a > div");
 
             Element link = actiongame.select("a").first();
 

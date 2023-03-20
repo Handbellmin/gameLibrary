@@ -1,6 +1,9 @@
 package com.project.gamelibrary.repository.impl;
 
+import com.project.gamelibrary.domain.Board;
 import com.project.gamelibrary.domain.BoardComment;
+import com.project.gamelibrary.domain.QBoardComment;
+import com.project.gamelibrary.repository.BoardCommentRepository;
 import com.project.gamelibrary.repository.custom.BoardCommentCustomRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +17,10 @@ public class BoardCommentCustomRepositoryImpl implements BoardCommentCustomRepos
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<BoardComment> findAllByBoardId() {
-        return null;
+    public List<BoardComment> findAllByBoardId(Long BoardId) {
+        QBoardComment qBoardComment = QBoardComment.boardComment;
+        return jpaQueryFactory.selectFrom(qBoardComment)
+                .where(qBoardComment.board.id.eq(BoardId))
+                .fetch();
     }
 }

@@ -30,6 +30,7 @@ public class BoardComment {
         private final String cmtContent;
         private String createId;
         private LocalDateTime createDate;
+        private Board board;
 
         public Builder(String cmtContent) {
             this.cmtContent = cmtContent;
@@ -40,6 +41,10 @@ public class BoardComment {
         }
         public Builder setCreateDate(LocalDateTime createDate){
             this.createDate = createDate;
+            return this;
+        }
+        public Builder setBoard(Board board){
+            this.board = board;
             return this;
         }
         public BoardComment build() { return new BoardComment(this);}
