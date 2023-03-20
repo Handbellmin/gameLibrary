@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
@@ -48,5 +49,10 @@ public class BoardController {
         board.setBoardCategory(boardForm.getBoardCategory());
         return "/boards/boardList";
     }
+    @GetMapping("/boards/{id}/detail")
+    public String detail(@PathVariable ("id") Long BoardId, Model model) {
+        Board board = boardService.findOne(BoardId);
 
+        return "/boards/details";
+    }
 }

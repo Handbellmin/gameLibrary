@@ -10,7 +10,7 @@ import java.util.List;
 import static jakarta.persistence.FetchType.*;
 
 @Entity
-@Getter @Setter
+@Getter
 public class Game {
     @Id @GeneratedValue
     @Column(name="game_id")
