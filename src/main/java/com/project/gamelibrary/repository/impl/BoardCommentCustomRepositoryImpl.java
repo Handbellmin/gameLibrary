@@ -2,6 +2,7 @@ package com.project.gamelibrary.repository.impl;
 
 import com.project.gamelibrary.domain.Board;
 import com.project.gamelibrary.domain.BoardComment;
+import com.project.gamelibrary.domain.QBoard;
 import com.project.gamelibrary.domain.QBoardComment;
 import com.project.gamelibrary.repository.BoardCommentRepository;
 import com.project.gamelibrary.repository.custom.BoardCommentCustomRepository;
@@ -19,8 +20,10 @@ public class BoardCommentCustomRepositoryImpl implements BoardCommentCustomRepos
     @Override
     public List<BoardComment> findAllByBoardId(Long BoardId) {
         QBoardComment qBoardComment = QBoardComment.boardComment;
+        QBoard qBoard = QBoard.board;
         return jpaQueryFactory.selectFrom(qBoardComment)
-                .where(qBoardComment.board.id.eq(BoardId))
+                .leftJoin(qBoardComment.board,qBoard)
+                .where(qBoard.board.id.eq(BoardId))
                 .fetch();
     }
 }
