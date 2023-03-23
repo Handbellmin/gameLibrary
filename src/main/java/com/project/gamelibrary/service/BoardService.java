@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
-
+    @Transactional
     public void saveBoard(Board board) {boardRepository.save(board);}
 
     public List<Board> findAll() {

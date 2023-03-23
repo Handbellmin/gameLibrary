@@ -13,11 +13,19 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         return http
-                .headers()
-                .frameOptions().sameOrigin()
+                .csrf().disable()
+                .headers().frameOptions().sameOrigin()
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers("/users/**").authenticated()
+                .requestMatchers("/manager/**").hasAnyRole("MANAGER","ADMIN")
+                .requestMatchers("/admin/**").hasAnyRole("ADMIN")
+                .anyRequest().permitAll()
+                .and().formLogin().loginPage("/login")
                 .and().build();
     }
 }

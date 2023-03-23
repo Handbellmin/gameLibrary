@@ -7,3 +7,4 @@ import java.util.List;
 public interface BoardCommentCustomRepository {
     List<BoardComment> findAllByBoardId(Long BoardId);
 }
+

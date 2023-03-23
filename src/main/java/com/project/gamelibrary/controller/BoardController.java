@@ -55,7 +55,7 @@ public class BoardController {
     @GetMapping("/boards/{id}/detail")
     public String detail(@PathVariable ("id") Long BoardId, Model model) {
         Board board = boardService.findOne(BoardId);
-        List<BoardComment> boardComments = boardCommentService.findByBoardId(BoardId);
+        List<BoardComment> boardComments = boardCommentService.findAllByBoardId(BoardId);
 
         model.addAttribute("board", board);
         model.addAttribute("boardComments", boardComments);

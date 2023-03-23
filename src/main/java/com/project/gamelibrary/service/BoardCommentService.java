@@ -18,7 +18,7 @@ public class BoardCommentService {
 
     public void saveBoardComment(BoardComment boardComment) {boardCommentRepository.save(boardComment);}
 
-    public List<BoardComment> findByBoardId(Long boardId) {
+    public List<BoardComment> findAllByBoardId(Long boardId) {
         return boardCommentCustomRepository.findAllByBoardId(boardId);
     }
 

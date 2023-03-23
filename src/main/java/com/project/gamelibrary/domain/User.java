@@ -4,12 +4,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name="Users")
-@Getter @Setter
+@Getter
 public class User {
 
     @Id @GeneratedValue
@@ -22,13 +23,13 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<SubScribe> subScribeList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
-    private List<PriorityGame> priorityGameList = new ArrayList<>();
-
     private String userName;
+
     private String userNickName;
 
     private String password;
+
+    private LocalDateTime createDate;
 
     @Embedded
     private Address address;
