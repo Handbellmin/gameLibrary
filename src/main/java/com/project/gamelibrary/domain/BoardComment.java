@@ -1,14 +1,15 @@
 package com.project.gamelibrary.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder(builderClassName = "BoardCommentBuilder")
 public class BoardComment {
     @Id @GeneratedValue
     @Column(name="boardComment_id")
@@ -26,34 +27,11 @@ public class BoardComment {
 
     private LocalDateTime updateDate;
 
-    public static class Builder {
-        private final String cmtContent;
-        private String createId;
-        private LocalDateTime createDate;
-        private Board board;
-
-        public Builder(String cmtContent) {
-            this.cmtContent = cmtContent;
+    public BoardCommentBuilder builder(String cmtContent) {
+        if(cmtContent == null){
+            throw new IllegalArgumentException("필수 파라미터 누락");
         }
-        public Builder setCreateId(String createId){
-            this.createId = createId;
-            return this;
-        }
-        public Builder setCreateDate(LocalDateTime createDate){
-            this.createDate = createDate;
-            return this;
-        }
-        public Builder setBoard(Board board){
-            this.board = board;
-            return this;
-        }
-        public BoardComment build() { return new BoardComment(this);}
+        return new BoardCommentBuilder().cmtContent(cmtContent);
     }
-    protected BoardComment() {}
 
-    private BoardComment(Builder builder){
-        this.cmtContent = builder.cmtContent;
-        this.createId = builder.createId;
-        this.createDate = builder.createDate;
-    }
 }

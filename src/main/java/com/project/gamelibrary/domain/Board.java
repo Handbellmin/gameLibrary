@@ -11,7 +11,7 @@ import java.util.List;
 import static jakarta.persistence.FetchType.*;
 
 @Entity
-@Getter @Setter
+@Getter
 public class Board {
     @Id @GeneratedValue
     @Column(name="board_id")

@@ -21,8 +21,10 @@ public class BoardCommentCustomRepositoryImpl implements BoardCommentCustomRepos
     public List<BoardComment> findAllByBoardId(Long BoardId) {
         QBoardComment qBoardComment = QBoardComment.boardComment;
         QBoard qBoard = QBoard.board;
-        return jpaQueryFactory.selectFrom(qBoardComment)
+        return jpaQueryFactory.select(qBoardComment)
+                .from(qBoardComment)
                 .leftJoin(qBoardComment.board,qBoard)
+                .fetchJoin()
                 .where(qBoard.board.id.eq(BoardId))
                 .fetch();
     }

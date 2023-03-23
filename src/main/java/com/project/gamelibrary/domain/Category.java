@@ -17,16 +17,19 @@ public class Category {
     private Long id;
 
     @OneToMany(mappedBy = "category")
-    private List<Game> gameList = new ArrayList<>();
+    private List<Item> itemList = new ArrayList<>();
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "priorityGame_id")
-    private PriorityGame priorityGame;
+    @OneToOne(mappedBy = "category")
+    private BoardCategory boardCategory;
 
-    private String mainType;
+    private String type;
 
-    private String type1;
-    private String type2;
-    private String type3;
+    private String column01;
+    private String column02;
+
+
+
+
+
 
 }
