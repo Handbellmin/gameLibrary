@@ -35,6 +35,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 	implementation 'org.eclipse.dirigible:dirigible-database-h2:7.7.7'
+	// https://mvnrepository.com/artifact/org.hibernate/hibernate-validator
+	implementation group: 'org.hibernate', name: 'hibernate-validator', version: '8.0.0.Final'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'

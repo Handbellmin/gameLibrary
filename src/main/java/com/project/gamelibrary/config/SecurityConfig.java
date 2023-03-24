@@ -25,7 +25,7 @@ public class SecurityConfig {
                 .requestMatchers("/manager/**").hasAnyRole("MANAGER","ADMIN")
                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                 .anyRequest().permitAll()
-                .and().formLogin().loginPage("/login")
+                .and().formLogin().loginPage("/loginForm")
                 .and().build();
     }
 }
