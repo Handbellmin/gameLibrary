@@ -13,10 +13,6 @@ public class PublishSite {
     @Column(name="publishSite_id")
     private Long id;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name="game_id")
-    private Game game;
-
     private String siteName;
 
     private String siteUrl;

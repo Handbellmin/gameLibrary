@@ -13,13 +13,13 @@
 <div class="container">
   <div th:replace="fragments/bodyHeader :: bodyHeader" />
   <div class="jumbotron">
-    <form th:action="/join" method="post">
-      <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="fieldError">잘못된 아이디.</p>
+    <form th:action="@{/join}" method="post" th:object="${userForm}">
       <input type="text" th:field="*{username}" class="form-control"  name="username" placeholder="Username 입력해주세요.">
-      <input type="password" name="password" placeholder="Password 입력해주세요.">
-
-      <input type="text" name="nickname" placeholder="닉네임을 설정해주세요.">
-      <button>회원 가입</button>
+      <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="fieldError">잘못된 아이디.</p>
+      <input type="password" name="password" th:field="*{password}" class="form-control" placeholder="Password 입력해주세요.">
+      <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="fieldError">잘못된 비밀번호.</p>
+      <input type="text" name="nickname" class="form-control" placeholder="닉네임을 설정해주세요.">
+      <button class="btn btn-lg btn-secondary">회원 가입</button>
     </form>
   </div>
   <div th:replace="fragments/footer :: footer" />

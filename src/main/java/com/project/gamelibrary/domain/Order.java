@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name="orders")
 @Getter
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order {
     @Id @GeneratedValue
     @Column(name = "order_id")
@@ -23,7 +23,7 @@ public class Order {
     private User user;
 
     @OneToMany(mappedBy = "order")
-    private List<OrderItem> OrderItem = new ArrayList<OrderItem>();
+    private List<OrderItem> OrderItems = new ArrayList<OrderItem>();
 
     @OneToOne
     @JoinColumn(name = "delivery_id")

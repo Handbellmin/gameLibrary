@@ -10,6 +10,7 @@ import java.util.List;
 @Entity
 @Table(name="Users")
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
     @Id @GeneratedValue
@@ -22,7 +23,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<SubScribe> subScribeList = new ArrayList<>();
 
-    private String userName;
+    private String username;
 
     private String userNickName;
 
@@ -33,29 +34,44 @@ public class User {
     @Embedded
     private Address address;
 
+    private String provider;
+    private String providerId;
+
     private String userRole;
     public static class Builder {
-        private final String userName;
+        private final String username;
 
         private final String password;
 
         private String userNickName;
         private LocalDateTime createDate;
         private String userRole;
-        public Builder (String userName, String password){
-            this.userName = userName;
+        
+        //Oauth2.0 로그인
+        private String provider;
+        private String providerId;
+        public Builder (String username, String password){
+            this.username = username;
             this.password = password;
         }
         public Builder setUserNickName(String userNickName) {
             this.userNickName = userNickName;
             return this;
         }
-        public Builder setCreatDate(LocalDateTime createDate) {
+        public Builder setCrateDate(LocalDateTime createDate) {
             this.createDate = createDate;
             return this;
         }
         public Builder setUserRole(String userRole) {
             this.userRole = userRole;
+            return this;
+        }
+        public Builder setProvider(String provider){
+            this.provider = provider;
+            return this;
+        }
+        public Builder setProviderId(String providerId) {
+            this.providerId = providerId;
             return this;
         }
 
@@ -64,10 +80,13 @@ public class User {
         }
     }
     public User(Builder builder){
-        this.userName = builder.userName;
+        this.username = builder.username;
         this.password = builder.password;
         this.userNickName = builder.userNickName;
         this.createDate = builder.createDate;
+        this.userRole = builder.userRole;
+        this.provider = builder.provider;
+        this.providerId = builder.providerId;
     }
 
 }

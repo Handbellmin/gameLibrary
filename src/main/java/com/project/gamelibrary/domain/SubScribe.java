@@ -19,16 +19,12 @@ public class SubScribe {
     @JoinColumn(name= "user_id")
     private User user;
 
-    @ManyToOne(fetch =  LAZY)
-    private Game game;
-
     private LocalDateTime subDate;
 
     protected SubScribe () {}
 
     public SubScribe(Builder builder){
         this.user = builder.user;
-        this.game = builder.game;
         this.subDate = builder.subDate;
     }
 
@@ -37,19 +33,14 @@ public class SubScribe {
         this.user = user;
         user.getSubScribeList().add(this);
     }
-    public void setGame(Game game) {
-        this.game = game;
-        game.getSubScribeList().add(this);
-    }
+
     //==생성 메서드==//
     public static class Builder {
         private final User user;
-        private final Game game;
         private LocalDateTime subDate;
 
-        public Builder(User user, Game game) {
+        public Builder(User user) {
             this.user = user;
-            this.game = game;
         }
 
         public Builder setSubDate(LocalDateTime subDate) {

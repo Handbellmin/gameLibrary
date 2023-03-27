@@ -2,7 +2,6 @@ package com.project.gamelibrary.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -53,17 +52,16 @@ public class Board {
         private final String ttl;
         private final String content;
         private final String createId;
+        private final String popupYn;
 
-        private final String PopupYn;
         private LocalDateTime createDate;
         private LocalDateTime updateDate;
-
 
         public Builder( String ttl, String content, String createId, String popupYn) {
             this.ttl = ttl;
             this.content = content;
             this.createId = createId;
-            this.PopupYn = popupYn;
+            this.popupYn = popupYn;
         }
         public Builder setCreateDate() {
             this.createDate = LocalDateTime.now();
@@ -82,6 +80,7 @@ public class Board {
         this.content = builder.content;
         this.createId = builder.createId;
         this.createDate = builder.createDate;
+        this.popupYn = builder.popupYn;
         this.updateDate = builder.updateDate;
     }
     public void addFile(Files files) {

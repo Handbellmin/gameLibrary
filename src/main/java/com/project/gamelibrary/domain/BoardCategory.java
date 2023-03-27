@@ -8,8 +8,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static jakarta.persistence.FetchType.*;
-
 @Entity
 @Getter @Setter
 public class BoardCategory {
@@ -20,6 +18,11 @@ public class BoardCategory {
     @OneToMany(mappedBy = "boardCategory")
     private List<Board> board = new ArrayList<>();
 
+    @OneToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     private LocalDateTime createDate;
+
 
 }

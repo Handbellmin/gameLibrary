@@ -15,6 +15,7 @@ public class UserForm {
 
     private String password;
     private String nickname;
+    private String userRole;
 
     private String street;
     private String street_detail;

@@ -17,14 +17,30 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create #create update none
+      ddl-auto: update #create update none
     properties:
       hibernate:
         show_sql: true
       format_sql: true
 
+  security:
+   oauth2:
+    client:
+      registration:
+        google:
+          client-id: 157230314822-oh799k0dcm3htc9kd58793es3os3tg26.apps.googleusercontent.com
+          client-secret: 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
+          scope:
+          - email
+          - profile
+  profile:
+    include: google
+
+
+
 logging:
   level:
     org.hibernate.SQL: debug
+
 
 

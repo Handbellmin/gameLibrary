@@ -35,7 +35,7 @@ public class BoardCommentServiceTest {
     @Rollback(value = false)
     public void selectByBoardId() throws Exception {
         //given
-        Board board = new Board.Builder("제목","내용","작성자","N", LocalDateTime.now()).build();
+        Board board = new Board.Builder("제목","내용","작성자","N").build();
     }
         
 }

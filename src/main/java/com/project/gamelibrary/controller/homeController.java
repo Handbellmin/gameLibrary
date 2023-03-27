@@ -9,4 +9,16 @@ public class homeController {
     public String home() {
         return "home";
     }
+
+    @GetMapping("/manager")
+    public String manger() {
+        System.out.println("manager 진입");
+        return "redirect:/";
+    }
+
+    @GetMapping("/admin")
+    public String admin() {
+        System.out.println("admin 진입");
+        return "redirect:/";
+    }
 }
