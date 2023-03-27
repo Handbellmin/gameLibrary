@@ -6,6 +6,7 @@ import com.project.gamelibrary.domain.BoardComment;
 import com.project.gamelibrary.service.BoardCategoryService;
 import com.project.gamelibrary.service.BoardCommentService;
 import com.project.gamelibrary.service.BoardService;
+import jakarta.ws.rs.Path;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,16 +45,41 @@ public class BoardController {
 
     @PostMapping("/boards/new")
     public String create(BoardForm boardForm){
-        Board board = new Board.Builder(
-                boardForm.getTtl(),
-                boardForm.getContent(),
-                boardForm.getCreateId(),
-                boardForm.getPopupYn(),
-                boardForm.getCreateDate()
-        ).build();
-        board.setBoardCategory(boardForm.getBoardCategory());
+        Board asBoard = boardService.findOne(boardForm.getId());
+        Board board;
+        //Update
+        if (asBoard != null ){
+             board = new Board.Builder(
+                    boardForm.getTtl(),
+                    boardForm.getContent(),
+                    boardForm.getCreateId(),
+                    boardForm.getPopupYn())
+                    .setUpdateDate()
+                    .build();
+        }
+        //Insert
+        else {
+            board = new Board.Builder(
+                    boardForm.getTtl(),
+                    boardForm.getContent(),
+                    boardForm.getCreateId(),
+                    boardForm.getPopupYn())
+                    .setCreateDate()
+                    .build();
+        }
+        boardService.saveBoard(board);
         return "/boards/boardList";
     }
+
+    @GetMapping("/boards/{id}/edit")
+    public String editForm(@PathVariable("id") Long BoardId, Model model){
+        Board board = boardService.findOne(BoardId);
+        model.addAttribute("boardCategories", boardCategoryService.findAll());
+        model.addAttribute("board", board);
+
+        return "/boards/createBoardForm";
+    }
+
     @GetMapping("/boards/{id}/detail")
     public String detail(@PathVariable ("id") Long BoardId, Model model) {
         Board board = boardService.findOne(BoardId);

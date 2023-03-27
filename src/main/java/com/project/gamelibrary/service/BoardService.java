@@ -16,6 +16,7 @@ public class BoardService {
     @Transactional
     public void saveBoard(Board board) {boardRepository.save(board);}
 
+
     public List<Board> findAll() {
         return boardRepository.findAll();
     }

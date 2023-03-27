@@ -28,6 +28,9 @@ public class Board {
     @OneToMany(mappedBy = "board")
     private List<BoardComment> boardCommentList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "board")
+    private List<Files> files = new ArrayList<>();
+
     private String ttl;
 
     private String content;
@@ -50,19 +53,26 @@ public class Board {
         private final String ttl;
         private final String content;
         private final String createId;
+
         private final String PopupYn;
+        private LocalDateTime createDate;
+        private LocalDateTime updateDate;
 
-        private final LocalDateTime createDate;
 
-
-        public Builder( String ttl, String content, String createId, String popupYn, LocalDateTime createDate) {
+        public Builder( String ttl, String content, String createId, String popupYn) {
             this.ttl = ttl;
             this.content = content;
             this.createId = createId;
             this.PopupYn = popupYn;
-            this.createDate = createDate;
         }
-
+        public Builder setCreateDate() {
+            this.createDate = LocalDateTime.now();
+            return this;
+        }
+        public Builder setUpdateDate() {
+            this.updateDate = LocalDateTime.now();
+            return this;
+        }
         public Board build() { return new Board(this);}
 
     }
@@ -72,8 +82,15 @@ public class Board {
         this.content = builder.content;
         this.createId = builder.createId;
         this.createDate = builder.createDate;
+        this.updateDate = builder.updateDate;
     }
+    public void addFile(Files files) {
+        this.files.add(files);
 
+        if(files.getBoard() != this){
+            files.setBoard(this);
+        }
+    }
     //== 비즈니스 로직 ==//
 
 

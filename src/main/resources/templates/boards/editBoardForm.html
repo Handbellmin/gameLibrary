@@ -19,7 +19,11 @@
       smartEditor();
 
        $("form").submit(function(event) {
+            var content = document.getElementById("editorTxt").value();
+            var ttl = document.getElementById("ttl").value();
 
+            console.log(content);
+            console.log(ttl);
        }
 
 
@@ -29,9 +33,9 @@
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
     <div>
-        <form th:action="@{/games/new}" th:object="${form}" method="post">
+        <form th:action="@{/boards/new}" th:object="${form}" method="post">
             <div>
-                <input type="text" id="ttl" placeholder="제목을 입력해주세요"/>
+                <input type="text" id="ttl" th:field="*{ttl}" placeholder="제목을 입력해주세요"/>
             </div>
             <div>
                 <select id="boardCategory_select">
@@ -42,9 +46,9 @@
             </div>
             <div id="smarteditor">
                 <textarea name="editorTxt" id="editorTxt"
-                  rows="20" cols="10"
-                  placeholder="내용을 입력해주세요"
-                  style="width: 500px"></textarea>
+                          rows="20" cols="10"
+                          placeholder="내용을 입력해주세요"
+                          style="width: 500px"></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>

@@ -17,8 +17,6 @@ public class BoardCategory {
     @Column(name="boardCategory_id")
     private Long id;
 
-    @OneToOne
-
     @OneToMany(mappedBy = "boardCategory")
     private List<Board> board = new ArrayList<>();
 
