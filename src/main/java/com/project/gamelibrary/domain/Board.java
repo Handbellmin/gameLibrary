@@ -91,7 +91,12 @@ public class Board {
         }
     }
     //== 비즈니스 로직 ==//
-
+    public void update(String ttl, String content, String popupYn){
+        this.ttl = ttl;
+        this.content = content;
+        this.updateDate = LocalDateTime.now();
+        this.popupYn = popupYn;
+    }
 
 
 

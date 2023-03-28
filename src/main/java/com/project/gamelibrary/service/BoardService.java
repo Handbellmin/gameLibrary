@@ -1,5 +1,6 @@
 package com.project.gamelibrary.service;
 
+import com.project.gamelibrary.Form.BoardForm;
 import com.project.gamelibrary.domain.Board;
 import com.project.gamelibrary.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,16 @@ import java.util.List;
 public class BoardService {
     private final BoardRepository boardRepository;
     @Transactional
-    public void saveBoard(Board board) {boardRepository.save(board);}
+    public void saveBoard(BoardForm boardForm) {
+        // Insert
+        if (boardForm.getId() != null ) {
+            Board asBoard = boardRepository.findOne(boardForm.getId());
+            asBoard.update(boardForm.getTtl(), boardForm.getContent(), boardForm.getPopupYn());
+            return;
+        }
+        boardRepository.save(boardForm.toEntity());
+        return;
+    }
 
 
     public List<Board> findAll() {

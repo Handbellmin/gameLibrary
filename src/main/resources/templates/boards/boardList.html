@@ -12,16 +12,17 @@
                 <th>제목</th>
                 <th>내용</th>
                 <th>작성자</th>
+                <th>수정</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="board : ${boards}">
                 <td th:text="${board.id}"></td>
                 <td th:text="${board.ttl}"></td>
-                <td th:text="${board.content}"></td>
+                <td th:utext="${board.content}"></td>
                 <td th:text="${board.createId}"></td>
                 <td>
-                    <a href="#" th:href="@{/board/{id}/edit (id=${board.id})}"
+                    <a href="#" th:href="@{/boards/{id}/edit (id=${board.id})}"
                        class="btn btn-primary" role="button">수정</a>
                 </td>
             </tr>

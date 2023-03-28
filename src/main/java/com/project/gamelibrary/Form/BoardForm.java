@@ -1,5 +1,6 @@
 package com.project.gamelibrary.Form;
 
+import com.project.gamelibrary.domain.Board;
 import com.project.gamelibrary.domain.BoardCategory;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
@@ -21,4 +22,10 @@ public class BoardForm {
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
     private BoardCategory boardCategory;
+
+    public Board toEntity() {
+        return new Board.Builder(ttl,content,createId,popupYn)
+                .build();
+    }
+
 }

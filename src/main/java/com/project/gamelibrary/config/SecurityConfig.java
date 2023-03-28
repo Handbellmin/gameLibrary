@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/users/**").authenticated()
+                .requestMatchers("/boards/**").authenticated()
                 .requestMatchers("/manager/**").hasAnyRole("MANAGER","ADMIN")
                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                 .anyRequest().permitAll()

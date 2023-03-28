@@ -9,18 +9,30 @@
     smartEditor = function() {
       nhn.husky.EZCreator.createInIFrame({
         oAppRef: oEditors,
-        elPlaceHolder: "editorTxt",
+        elPlaceHolder: "content",
         sSkinURI: "/smarteditor/SmartEditor2Skin.html",
         fCreator: "createSEditor2"
       })
     }
 
     $(document).ready(function() {
-      smartEditor();
-
-       $("form").submit(function(event) {
-
-       }
+       smartEditor();
+       $("#form").submit(function(event) {
+            oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", [])
+            event.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+              type: "POST",
+              url: "/boards/new",
+              data: formData,
+              success: function(response) {
+                location.href="/boards";
+              },
+              error: function(xhr, status, error) {
+                alert("정상적인 요청이 아닙니다");
+              }
+            });
+       });
 
 
     })
@@ -29,9 +41,10 @@
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
     <div>
-        <form th:action="@{/games/new}" th:object="${form}" method="post">
+        <form id="form" th:action="@{/boards/new}" th:object="${form}" method="post">
+            <input type="hidden" th:field="*{id}"/>
             <div>
-                <input type="text" id="ttl" placeholder="제목을 입력해주세요"/>
+                <input type="text" th:field="*{ttl}" id="ttl" placeholder="제목을 입력해주세요"/>
             </div>
             <div>
                 <select id="boardCategory_select">
@@ -41,7 +54,7 @@
                 </select>
             </div>
             <div id="smarteditor">
-                <textarea name="editorTxt" id="editorTxt"
+                <textarea name="content" id="content" th:text="*{content}"
                   rows="20" cols="10"
                   placeholder="내용을 입력해주세요"
                   style="width: 500px"></textarea>

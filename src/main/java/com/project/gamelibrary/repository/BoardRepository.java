@@ -1,5 +1,6 @@
 package com.project.gamelibrary.repository;
 
+import com.project.gamelibrary.Form.BoardForm;
 import com.project.gamelibrary.domain.Board;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;

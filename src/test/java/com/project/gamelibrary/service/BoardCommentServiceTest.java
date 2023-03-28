@@ -1,5 +1,7 @@
 package com.project.gamelibrary.service;
 
+import com.mysema.commons.lang.Assert;
+import com.project.gamelibrary.Form.BoardForm;
 import com.project.gamelibrary.domain.Board;
 import com.project.gamelibrary.domain.BoardComment;
 import com.project.gamelibrary.domain.QBoard;
@@ -32,10 +34,17 @@ public class BoardCommentServiceTest {
     BoardCommentService boardCommentService;
     
     @Test
-    @Rollback(value = false)
     public void selectByBoardId() throws Exception {
         //given
-        Board board = new Board.Builder("제목","내용","작성자","N").build();
+        BoardForm boardForm = new BoardForm();
+        boardForm.setTtl("test");
+        boardForm.setContent("content");
+        boardForm.setPopupYn("N");
+        boardService.saveBoard(boardForm);
+
+        Board asBoard = boardService.findOne(1L);
+        Assertions.assertEquals(asBoard.getContent(),"content");
+
     }
         
 }

@@ -1,6 +1,7 @@
 package com.project.gamelibrary.controller;
 
 import com.project.gamelibrary.Form.BoardForm;
+import com.project.gamelibrary.config.auth.PrincipalDetails;
 import com.project.gamelibrary.domain.Board;
 import com.project.gamelibrary.domain.BoardComment;
 import com.project.gamelibrary.service.BoardCategoryService;
@@ -9,6 +10,7 @@ import com.project.gamelibrary.service.BoardService;
 import jakarta.ws.rs.Path;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,38 +46,18 @@ public class BoardController {
     }
 
     @PostMapping("/boards/new")
-    public String create(BoardForm boardForm){
-        Board asBoard = boardService.findOne(boardForm.getId());
-        Board board;
-        //Update
-        if (asBoard != null ){
-             board = new Board.Builder(
-                    boardForm.getTtl(),
-                    boardForm.getContent(),
-                    boardForm.getCreateId(),
-                    boardForm.getPopupYn())
-                    .setUpdateDate()
-                    .build();
-        }
-        //Insert
-        else {
-            board = new Board.Builder(
-                    boardForm.getTtl(),
-                    boardForm.getContent(),
-                    boardForm.getCreateId(),
-                    boardForm.getPopupYn())
-                    .setCreateDate()
-                    .build();
-        }
-        boardService.saveBoard(board);
-        return "/boards/boardList";
+    public String create(@AuthenticationPrincipal PrincipalDetails userDetails,
+            BoardForm boardForm){
+        boardForm.setCreateId(userDetails.getUser().getUsername());
+        boardService.saveBoard(boardForm);
+        return "redirect:/boards";
     }
 
     @GetMapping("/boards/{id}/edit")
     public String editForm(@PathVariable("id") Long BoardId, Model model){
         Board board = boardService.findOne(BoardId);
         model.addAttribute("boardCategories", boardCategoryService.findAll());
-        model.addAttribute("board", board);
+        model.addAttribute("form", board);
 
         return "/boards/createBoardForm";
     }
