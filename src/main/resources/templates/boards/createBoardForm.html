@@ -20,15 +20,16 @@
        $("#form").submit(function(event) {
             oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", [])
             event.preventDefault();
-            var formData = $(this).serialize();
+            var boardForm = $("#form");
             $.ajax({
-              type: "POST",
+              type: "post",
               url: "/boards/new",
-              data: formData,
+              enctype: "multipart/form-data",
+              data: boardForm,
               success: function(response) {
                 location.href="/boards";
               },
-              error: function(xhr, status, error) {
+              error: function(status, error) {
                 alert("정상적인 요청이 아닙니다");
               }
             });
@@ -41,7 +42,7 @@
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
     <div>
-        <form id="form" th:action="@{/boards/new}" th:object="${form}" method="post">
+        <form id="form" th:action="@{/boards/new}" th:object="${boardForm}" method="post" enctype="multipart/form-data">
             <input type="hidden" th:field="*{id}"/>
             <div>
                 <input type="text" th:field="*{ttl}" id="ttl" placeholder="제목을 입력해주세요"/>
@@ -58,6 +59,10 @@
                   rows="20" cols="10"
                   placeholder="내용을 입력해주세요"
                   style="width: 500px"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="files" class="form-label">파일업로드</label>
+                <input class="form-control" type="file" id="files" name="multipartFile" multiple="multiple">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>

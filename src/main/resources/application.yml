@@ -43,4 +43,5 @@ logging:
     org.hibernate.SQL: debug
 
 
-
+upload:
+  path: C:/study/file/

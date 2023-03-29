@@ -7,15 +7,16 @@ import com.project.gamelibrary.domain.BoardComment;
 import com.project.gamelibrary.service.BoardCategoryService;
 import com.project.gamelibrary.service.BoardCommentService;
 import com.project.gamelibrary.service.BoardService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.Path;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -41,15 +42,19 @@ public class BoardController {
     @GetMapping("/boards/new")
     public String createForm(Model model){
         model.addAttribute("boardCategories", boardCategoryService.findAll());
-        model.addAttribute("form", new BoardForm());
+        model.addAttribute("boardForm", new BoardForm());
         return "/boards/createBoardForm";
     }
 
     @PostMapping("/boards/new")
     public String create(@AuthenticationPrincipal PrincipalDetails userDetails,
-            BoardForm boardForm){
+                         BoardForm boardForm,
+                         @RequestPart(value ="files", required = false) List<MultipartFile> files
+    ) throws Exception{
+        log.info("boardForm : {[]}",boardForm);
+        log.info("files : {[]}",files);
         boardForm.setCreateId(userDetails.getUser().getUsername());
-        boardService.saveBoard(boardForm);
+        //boardService.saveBoard(boardForm,files);
         return "redirect:/boards";
     }
 
@@ -57,7 +62,7 @@ public class BoardController {
     public String editForm(@PathVariable("id") Long BoardId, Model model){
         Board board = boardService.findOne(BoardId);
         model.addAttribute("boardCategories", boardCategoryService.findAll());
-        model.addAttribute("form", board);
+        model.addAttribute("boardForm", board);
 
         return "/boards/createBoardForm";
     }
@@ -71,5 +76,17 @@ public class BoardController {
         model.addAttribute("boardComments", boardComments);
 
         return "/boards/details";
+    }
+
+    @PostMapping(value="smarteditorMultiImageUpload")
+    public void smarteditorImageUpload(HttpServletRequest request, HttpServletResponse response) {
+        String sFileInfo = "";
+        String sFilename = request.getHeader("file-name");
+        String sFilenameExt = sFilename.substring(sFilename.lastIndexOf(".")+1);
+        sFilenameExt = sFilenameExt.toLowerCase();
+
+        String[] whiteChk = {"jpg","png","bmp","gif"};
+
+
     }
 }

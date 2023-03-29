@@ -13,7 +13,10 @@ import java.util.List;
 public class BoardRepository {
     private final EntityManager em;
 
-    public void save(Board board) {em.persist(board);}
+    public Long save(Board board) {
+        em.persist(board);
+        return board.getId();
+    }
 
     public Board findOne(Long boardId) {
         return em.find(Board.class, boardId);

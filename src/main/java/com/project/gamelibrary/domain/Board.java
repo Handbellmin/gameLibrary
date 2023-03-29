@@ -2,6 +2,7 @@ package com.project.gamelibrary.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -54,6 +55,8 @@ public class Board {
         private final String createId;
         private final String popupYn;
 
+        private List<Files> files;
+
         private LocalDateTime createDate;
         private LocalDateTime updateDate;
 
@@ -71,6 +74,10 @@ public class Board {
             this.updateDate = LocalDateTime.now();
             return this;
         }
+        public Builder setFiles(List<Files> files) {
+            this.files = files;
+            return this;
+        }
         public Board build() { return new Board(this);}
 
     }
@@ -82,14 +89,9 @@ public class Board {
         this.createDate = builder.createDate;
         this.popupYn = builder.popupYn;
         this.updateDate = builder.updateDate;
+        this.files = builder.files;
     }
-    public void addFile(Files files) {
-        this.files.add(files);
 
-        if(files.getBoard() != this){
-            files.setBoard(this);
-        }
-    }
     //== 비즈니스 로직 ==//
     public void update(String ttl, String content, String popupYn){
         this.ttl = ttl;
@@ -98,6 +100,12 @@ public class Board {
         this.popupYn = popupYn;
     }
 
+    public void addFiles(Files files){
+        this.files.add(files);
+        if(files.getBoard() != this){
+            files.setBoard(this);
+        }
 
+    }
 
 }

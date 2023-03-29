@@ -40,7 +40,6 @@ public class BoardCommentServiceTest {
         boardForm.setTtl("test");
         boardForm.setContent("content");
         boardForm.setPopupYn("N");
-        boardService.saveBoard(boardForm);
 
         Board asBoard = boardService.findOne(1L);
         Assertions.assertEquals(asBoard.getContent(),"content");
