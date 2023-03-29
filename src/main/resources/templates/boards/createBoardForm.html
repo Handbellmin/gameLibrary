@@ -17,14 +17,15 @@
 
     $(document).ready(function() {
        smartEditor();
-       $("#form").submit(function(event) {
+       $("#boardForm").submit(function(event) {
             oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", [])
             event.preventDefault();
-            var boardForm = $("#form");
+            var boardForm = new FormData($("#boardForm")[0]);
+            var inputFile = $("#file")
+            var file = inputFile[0].files;
             $.ajax({
               type: "post",
               url: "/boards/new",
-              enctype: "multipart/form-data",
               data: boardForm,
               success: function(response) {
                 location.href="/boards";
@@ -42,7 +43,7 @@
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
     <div>
-        <form id="form" th:action="@{/boards/new}" th:object="${boardForm}" method="post" enctype="multipart/form-data">
+        <form id="boardForm" th:action="@{/boards/new}" th:object="${boardForm}" method="post" >
             <input type="hidden" th:field="*{id}"/>
             <div>
                 <input type="text" th:field="*{ttl}" id="ttl" placeholder="제목을 입력해주세요"/>
@@ -61,8 +62,8 @@
                   style="width: 500px"></textarea>
             </div>
             <div class="mb-3">
-                <label for="files" class="form-label">파일업로드</label>
-                <input class="form-control" type="file" id="files" name="multipartFile" multiple="multiple">
+                <label for="file" class="form-label">파일업로드</label>
+                <input class="form-control" type="file" name="MultiFile" id="file" multiple="multiple">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>

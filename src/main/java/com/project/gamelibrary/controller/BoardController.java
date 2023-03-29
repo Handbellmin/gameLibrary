@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -48,11 +49,11 @@ public class BoardController {
 
     @PostMapping("/boards/new")
     public String create(@AuthenticationPrincipal PrincipalDetails userDetails,
-                         BoardForm boardForm,
-                         @RequestPart(value ="files", required = false) List<MultipartFile> files
+                         @ModelAttribute BoardForm boardForm
     ) throws Exception{
-        log.info("boardForm : {[]}",boardForm);
-        log.info("files : {[]}",files);
+        log.info("boardForm :[{}]",boardForm);
+        System.out.println(boardForm.getTtl());
+
         boardForm.setCreateId(userDetails.getUser().getUsername());
         //boardService.saveBoard(boardForm,files);
         return "redirect:/boards";
