@@ -29,6 +29,8 @@ public class User {
 
     private String password;
 
+    private String email;
+
     private LocalDateTime createDate;
 
     @Embedded
@@ -43,6 +45,7 @@ public class User {
 
         private final String password;
 
+        private String email;
         private String userNickName;
         private LocalDateTime createDate;
         private String userRole;
@@ -74,6 +77,10 @@ public class User {
             this.providerId = providerId;
             return this;
         }
+        public Builder setEmail(String email) {
+            this.email = email;
+            return this;
+        }
 
         public User build() {
             return new User(this);
@@ -87,6 +94,7 @@ public class User {
         this.userRole = builder.userRole;
         this.provider = builder.provider;
         this.providerId = builder.providerId;
+        this.email = builder.email;
     }
 
 }

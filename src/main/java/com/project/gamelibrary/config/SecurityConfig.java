@@ -1,13 +1,10 @@
 package com.project.gamelibrary.config;
 
 import com.project.gamelibrary.config.oauth.PrincipalOauth2UserService;
-import jakarta.servlet.http.HttpServlet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,10 +19,10 @@ public class SecurityConfig {
 
     @Autowired
     private PrincipalOauth2UserService principalOauth2UserService;
-    @Bean //해당 메서드의 리턴되는 오브젝트를 IoC로 등록
+    /*@Bean //해당 메서드의 리턴되는 오브젝트를 IoC로 등록
     public BCryptPasswordEncoder encodePwd() {
         return new BCryptPasswordEncoder();
-    }
+    }*/
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
