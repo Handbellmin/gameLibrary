@@ -15,15 +15,19 @@
       })
     }
     var fileList = []
+    var removeList = []
     $(document).ready(function() {
        smartEditor();
        $("#files").change(function() {
-        const fileList = $("#fileDrop");
-        const files = $(this)[0].files;
+        const f = $(this)[0].files[0];
         var tag = "";
-        const fileItem = files.name;
-        fileList.push(files);
-        var fS = files.size / 1024 / 1024;
+        console.log(f);
+        const fileItem = f.name;
+        fileList.push(f);
+        $("#files").val("");
+        var fS = f.size / 1024 / 1024;
+        console.log(fileItem);
+        console.log(fS);
         fS = fS < 1? fS.toFixed(3) : fS.toFixed(1);
           tag +=
                       "<div class='fileList'>" +
@@ -102,9 +106,10 @@
               }
             });
        });
-
-
     })
+    function fileRemove(fileId) {
+        console.log(fileId);
+    }
   </script>
 <style>
     *{padding:0;margin:0}
@@ -142,11 +147,13 @@
             <div id="fileDrop" class="fileDrop"></div>
             <div class="mb-3">
                 <label for="files" class="form-label">파일업로드</label>
-                <li th:each="file : ${files}" th:if="${file.id ne null}">
+                <li style ="height: 58px" th:each="file : ${files}" th:if="${file.id ne null}">
+                    <a th:value="${file.id}" class="btn btn-primary" style="float:right" onclick="fileRemove(this)">삭제</a>
                     <span th:text="${file.originFileName}">hwp</span>
                 </li>
+            </div>
+            <div class="mb-3">
                 <input class="form-control" type="file" name="files" id="files" multiple>
-                <input class="form-control" type="file" name="files" id="files1" multiple>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
