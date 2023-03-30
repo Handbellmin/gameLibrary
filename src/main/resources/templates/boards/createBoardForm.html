@@ -14,19 +14,86 @@
         fCreator: "createSEditor2"
       })
     }
-
+    var fileList = []
     $(document).ready(function() {
        smartEditor();
+       $("#files").change(function() {
+        const fileList = $("#fileDrop");
+        const files = $(this)[0].files;
+        var tag = "";
+        const fileItem = files.name;
+        fileList.push(files);
+        var fS = files.size / 1024 / 1024;
+        fS = fS < 1? fS.toFixed(3) : fS.toFixed(1);
+          tag +=
+                      "<div class='fileList'>" +
+                      "<span class='fileName'>"+ fileItem + "</span>" +
+                      "<span class='fileSize'>"+ fS + " MB</span>" +
+                      "<span class='clear'></span>" +
+                      "</div>";
+
+          $("#fileDrop").append(tag);
+          console.log(fileList);
+        });
+       $("#fileDrop").on("dragenter",function(e){
+            e.preventDefault();
+            e.stopPropagation();
+       }).on("dragover",function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).css("background-color","#FFD8D8");
+       }).on("dragleave",function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).css("background-color","#FFF");
+       }).on("drop",function(e) {
+            e.preventDefault();
+
+            var files = e.originalEvent.dataTransfer.files;
+            if(files != null && files != undefined) {
+                var tag = "";
+                for (i=0; i< files.length; i++) {
+                    var f = files[i];
+                    fileList.push(f)
+                    var fileName = f.name;
+                    var fileSize = f.size / 1024 / 1024;
+                    fileSize = fileSize < 1? fileSize.toFixed(3) : fileSize.toFixed(1);
+                    tag +=
+                        "<div class='fileList'>" +
+                        "<span class='fileName'>"+ fileName + "</span>" +
+                        "<span class='fileSize'>"+ fileSize + " MB</span>" +
+                        "<span class='clear'></span>" +
+                        "</div>";
+                    }
+                    $(this).append(tag);
+                }
+                $(this).css("background-color", "#FFF");
+       });
+
        $("#boardForm").submit(function(event) {
             oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", [])
             event.preventDefault();
-            var boardForm = new FormData($("#boardForm")[0]);
-            var inputFile = $("#file")
-            var file = inputFile[0].files;
-            $.ajax({
+            var formData = new FormData(this);
+            var ttl = $("#ttl").val();
+            var content = $("#content").val();
+            var id = $("#id").val();
+            formData.append("boardForm",
+            JSON.stringify({
+                    id : id,
+                    ttl: ttl,
+                    content : content
+            }));
+            if(fileList.length >0) {
+                fileList.forEach(function(f){
+                    formData.append("files",f);
+                    });
+            }
+           $.ajax({
               type: "post",
               url: "/boards/new",
-              data: boardForm,
+              data: formData,
+              processData: false,
+              contentType: false,
               success: function(response) {
                 location.href="/boards";
               },
@@ -39,6 +106,17 @@
 
     })
   </script>
+<style>
+    *{padding:0;margin:0}
+    html, body, .wrap{width: 100%;}
+    .clear{clear:both;}
+    .wrap>.fileBox{padding: 20px;}
+    .fileBox input, textarea{width: 100%;}
+    .fileBox textarea{resize:none;}
+    .fileDrop{display: inline-block;width: 700px;height: 75px;border: 1px solid #000;overflow: auto;}
+    .fileDrop .fileList .fileName{padding-left: 20px;}
+    .fileDrop .fileList .fileSize{padding-right: 20px; float:right;}
+</style>
 <body>
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
@@ -61,9 +139,14 @@
                   placeholder="내용을 입력해주세요"
                   style="width: 500px"></textarea>
             </div>
+            <div id="fileDrop" class="fileDrop"></div>
             <div class="mb-3">
-                <label for="file" class="form-label">파일업로드</label>
-                <input class="form-control" type="file" name="MultiFile" id="file" multiple="multiple">
+                <label for="files" class="form-label">파일업로드</label>
+                <li th:each="file : ${files}" th:if="${file.id ne null}">
+                    <span th:text="${file.originFileName}">hwp</span>
+                </li>
+                <input class="form-control" type="file" name="files" id="files" multiple>
+                <input class="form-control" type="file" name="files" id="files1" multiple>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>

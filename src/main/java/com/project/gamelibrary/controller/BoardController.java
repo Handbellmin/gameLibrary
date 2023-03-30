@@ -1,12 +1,15 @@
 package com.project.gamelibrary.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.gamelibrary.Form.BoardForm;
 import com.project.gamelibrary.config.auth.PrincipalDetails;
 import com.project.gamelibrary.domain.Board;
 import com.project.gamelibrary.domain.BoardComment;
+import com.project.gamelibrary.domain.Files;
 import com.project.gamelibrary.service.BoardCategoryService;
 import com.project.gamelibrary.service.BoardCommentService;
 import com.project.gamelibrary.service.BoardService;
+import com.project.gamelibrary.service.FileService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.Path;
@@ -18,11 +21,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.MultipartRequest;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -31,6 +36,7 @@ public class BoardController {
     private final BoardService boardService;
     private final BoardCommentService boardCommentService;
     private final BoardCategoryService boardCategoryService;
+    private final FileService fileService;
 
     @GetMapping("/boards")
     public String boardList(Model model){
@@ -49,13 +55,14 @@ public class BoardController {
 
     @PostMapping("/boards/new")
     public String create(@AuthenticationPrincipal PrincipalDetails userDetails,
-                         @ModelAttribute BoardForm boardForm
+                         @RequestParam(name = "boardForm") String boardForm,
+                         @RequestParam(name = "files") List<MultipartFile> file
     ) throws Exception{
-        log.info("boardForm :[{}]",boardForm);
-        System.out.println(boardForm.getTtl());
-
-        boardForm.setCreateId(userDetails.getUser().getUsername());
-        //boardService.saveBoard(boardForm,files);
+        ObjectMapper mapper = new ObjectMapper();
+        BoardForm boardForm1 = mapper.readValue(boardForm,BoardForm.class);
+        boardForm1.setCreateId(userDetails.getUser().getUsername());
+        List<MultipartFile> multipartFiles = file.stream().filter(e -> e.getSize() > 0).toList();
+        boardService.saveBoard(boardForm1, multipartFiles);
         return "redirect:/boards";
     }
 
@@ -64,6 +71,7 @@ public class BoardController {
         Board board = boardService.findOne(BoardId);
         model.addAttribute("boardCategories", boardCategoryService.findAll());
         model.addAttribute("boardForm", board);
+        model.addAttribute("files", fileService.findByboardId(BoardId));
 
         return "/boards/createBoardForm";
     }

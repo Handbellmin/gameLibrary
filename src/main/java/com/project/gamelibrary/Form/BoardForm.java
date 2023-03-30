@@ -2,7 +2,9 @@ package com.project.gamelibrary.Form;
 
 import com.project.gamelibrary.domain.Board;
 import com.project.gamelibrary.domain.BoardCategory;
+import com.project.gamelibrary.domain.Files;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter @Setter
+@Data
 public class BoardForm {
     private Long id;
     @NotEmpty(message = "제목을 입력하세요.")
@@ -22,11 +24,10 @@ public class BoardForm {
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
     private BoardCategory boardCategory;
-
-    private List<MultipartFile> multipartFiles;
+    private List<Files> files;
 
     public Board toEntity() {
-        return new Board.Builder(ttl,content,createId,popupYn)
+        return new Board.Builder(ttl,content,createId,popupYn,files)
                 .build();
     }
 

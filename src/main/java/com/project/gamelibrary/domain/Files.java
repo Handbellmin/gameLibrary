@@ -51,7 +51,6 @@ public class Files {
             this.fileSize = fileSize;
             this.savedFileName = savedFileName;
         }
-
         public Builder setExtension(String extension){
             this.extension = extension;
             return this;
@@ -70,6 +69,8 @@ public class Files {
     private Files(Builder builder){
         this.board = builder.board;
         this.originFileName = builder.originFileName;
+        this.savedFileName = builder.savedFileName;
+        this.uploadDir = builder.uploadDir;
         this.fileSize = builder.fileSize;
         this.extension = builder.extension;
         this.contentType = builder.contentType;

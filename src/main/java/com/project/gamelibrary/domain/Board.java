@@ -2,7 +2,6 @@ package com.project.gamelibrary.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ public class Board {
     @OneToMany(mappedBy = "board")
     private List<BoardComment> boardCommentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.PERSIST)
     private List<Files> files = new ArrayList<>();
 
     private String ttl;
@@ -55,12 +54,12 @@ public class Board {
         private final String createId;
         private final String popupYn;
 
-        private List<Files> files;
+        private List<Files> files = new ArrayList<>();
 
         private LocalDateTime createDate;
         private LocalDateTime updateDate;
 
-        public Builder( String ttl, String content, String createId, String popupYn) {
+        public Builder(String ttl, String content, String createId, String popupYn, List<Files> files) {
             this.ttl = ttl;
             this.content = content;
             this.createId = createId;

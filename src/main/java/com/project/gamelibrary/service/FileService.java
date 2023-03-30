@@ -25,63 +25,16 @@ public class FileService {
     private String uploadDir;
 
     private final FileRepository fileRepository;
+    public List<Files> findByboardId(Long boardId) {
+        return fileRepository.findByBoardId(boardId);
+    }
 
     @Transactional
-    public Map<String, Object> saveFile(BoardForm boardForm) throws Exception {
-        List<MultipartFile> multipartFiles = boardForm.getMultipartFiles();
-        Map<String, Object> result = new HashMap<>();
+    public void saveFile(BoardForm boardForm) throws Exception {
 
-        List<Long> fileIds = new ArrayList<>();
-
-        try{
-            if (multipartFiles != null) {
-                if (multipartFiles.size() > 0 && !multipartFiles.get(0).getOriginalFilename().equals("")){
-                    for (MultipartFile file1 : multipartFiles) {
-                        String originalFileName = file1.getOriginalFilename();
-                        String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
-                        String savedFileName = UUID.randomUUID() + extension;
-
-                        File targetFile = new File(uploadDir + savedFileName);
-
-                        result.put("result", "FAIL");
-
-                        FileForm fileForm = FileForm.builder()
-                                        .board(boardForm.toEntity())
-                                        .originFileName(originalFileName)
-                                        .savedFileName(savedFileName)
-                                        .uploadDir(uploadDir)
-                                        .extension(extension)
-                                        .fileSize(file1.getSize())
-                                        .contentType(file1.getContentType())
-                                        .regDate(LocalDateTime.now())
-                                .build();
-
-                        Long fileId = insertFile(fileForm.toEntity());
-                        log.info("fileId={}", fileId);
-
-                        try{
-                            InputStream fileStream = file1.getInputStream();
-                            FileUtils.copyInputStreamToFile(fileStream, targetFile);
-                            fileIds.add(fileId);
-                            result.put("fileIdxs", fileIds.toString());
-                            result.put("result","OK");
-                        } catch(Exception e) {
-                            FileUtils.deleteQuietly(targetFile);
-                            e.printStackTrace();
-                            result.put("result","FAIL");
-                            break;
-                        }
-                    }
-                }
-            }
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return result;
     }
     @Transactional
     public Long insertFile(Files files){
-
         return fileRepository.save(files).getId();
     }
 }

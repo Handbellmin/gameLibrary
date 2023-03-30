@@ -47,7 +47,7 @@ public class FileHandler {
                 if (!wasSuccessful) System.out.println("files: directory is not make");
             }
             for (MultipartFile multipartFile : multipartFiles) {
-                String originalName =  multipartFile.getName();
+                String originalName =  multipartFile.getOriginalFilename();
                 String originalFileExtension = originalName.substring(originalName.lastIndexOf("."));
                 String conetentType = multipartFile.getContentType();
 

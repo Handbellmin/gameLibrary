@@ -26,17 +26,21 @@ public class BoardService {
     public void saveBoard(BoardForm boardForm, List<MultipartFile> files) throws Exception {
         // Insert
         Board board = boardForm.toEntity();
+        Long boardId;
         if (boardForm.getId() != null ) {
+            boardId = boardForm.getId();
             Board asBoard = boardRepository.findOne(boardForm.getId());
             asBoard.update(boardForm.getTtl(), boardForm.getContent(), boardForm.getPopupYn());
         } else {
-            boardRepository.save(boardForm.toEntity());
+            boardId = boardRepository.save(boardForm.toEntity());
         }
-        log.info("files :{[]}", files);
+        log.info("files :[{}]", files);
         List<Files> fileList = fileHandler.parseFileInfo(files);
+        board = boardRepository.findOne(boardId);
         if(!fileList.isEmpty()) {
             for (Files file : fileList) {
-                boardForm.toEntity().addFiles(fileRepository.save(file));
+                board.addFiles(file);
+                fileRepository.save(file);
             }
         }
     }
