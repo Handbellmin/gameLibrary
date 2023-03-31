@@ -3,6 +3,7 @@
 <head th:replace="fragments/header :: header" />
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
+<script type="text/javascript" src="/js/file.js" charset="utf-8"></script>
 <script>
     let oEditors = []
 
@@ -18,27 +19,10 @@
     var removeList = []
     $(document).ready(function() {
        smartEditor();
-       $("#files").change(function() {
-        const f = $(this)[0].files[0];
-        var tag = "";
-        console.log(f);
-        const fileItem = f.name;
-        fileList.push(f);
-        $("#files").val("");
-        var fS = f.size / 1024 / 1024;
-        console.log(fileItem);
-        console.log(fS);
-        fS = fS < 1? fS.toFixed(3) : fS.toFixed(1);
-          tag +=
-                      "<div class='fileList'>" +
-                      "<span class='fileName'>"+ fileItem + "</span>" +
-                      "<span class='fileSize'>"+ fS + " MB</span>" +
-                      "<span class='clear'></span>" +
-                      "</div>";
 
-          $("#fileDrop").append(tag);
-          console.log(fileList);
-        });
+       $("#files").change(function() {
+            selectFile($(this)[0].files,fileList);
+       });
        $("#fileDrop").on("dragenter",function(e){
             e.preventDefault();
             e.stopPropagation();
@@ -52,26 +36,9 @@
             $(this).css("background-color","#FFF");
        }).on("drop",function(e) {
             e.preventDefault();
-
             var files = e.originalEvent.dataTransfer.files;
-            if(files != null && files != undefined) {
-                var tag = "";
-                for (i=0; i< files.length; i++) {
-                    var f = files[i];
-                    fileList.push(f)
-                    var fileName = f.name;
-                    var fileSize = f.size / 1024 / 1024;
-                    fileSize = fileSize < 1? fileSize.toFixed(3) : fileSize.toFixed(1);
-                    tag +=
-                        "<div class='fileList'>" +
-                        "<span class='fileName'>"+ fileName + "</span>" +
-                        "<span class='fileSize'>"+ fileSize + " MB</span>" +
-                        "<span class='clear'></span>" +
-                        "</div>";
-                    }
-                    $(this).append(tag);
-                }
-                $(this).css("background-color", "#FFF");
+            dropFile(files, fileList);
+            $(this).css("background-color", "#FFF");
        });
 
        $("#boardForm").submit(function(event) {
@@ -92,6 +59,11 @@
                     formData.append("files",f);
                     });
             }
+            if(removeList.length > 0) {
+                removeList.forEach(function(f){
+                    formData.append("removeFile",f);
+                    });
+            }
            $.ajax({
               type: "post",
               url: "/boards/new",
@@ -107,8 +79,10 @@
             });
        });
     })
-    function fileRemove(fileId) {
-        console.log(fileId);
+    function fileRemove(file) {
+        var fileId = file.id;
+        removeList.push(fileId);
+        file.parentElement.remove();
     }
   </script>
 <style>
@@ -148,7 +122,7 @@
             <div class="mb-3">
                 <label for="files" class="form-label">파일업로드</label>
                 <li style ="height: 58px" th:each="file : ${files}" th:if="${file.id ne null}">
-                    <a th:value="${file.id}" class="btn btn-primary" style="float:right" onclick="fileRemove(this)">삭제</a>
+                    <input type="button" value="삭제" th:id="${file.id}" class="btn btn-primary" style="float:right" onclick="fileRemove(this)"/>
                     <span th:text="${file.originFileName}">hwp</span>
                 </li>
             </div>

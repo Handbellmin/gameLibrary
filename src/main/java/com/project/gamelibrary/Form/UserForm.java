@@ -3,10 +3,12 @@ package com.project.gamelibrary.Form;
 import com.project.gamelibrary.domain.Address;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Data
 public class UserForm {
     @NotEmpty(message = "아이디를 입력해주세요.")
     private String username;
@@ -19,4 +21,11 @@ public class UserForm {
 
     private String street;
     private String street_detail;
+    @Builder
+    public UserForm(String username, String password, String nickname, String userRole) {
+        this.username = username;
+        this.password = password;
+        this.nickname = nickname;
+        this.userRole = userRole;
+    }
 }

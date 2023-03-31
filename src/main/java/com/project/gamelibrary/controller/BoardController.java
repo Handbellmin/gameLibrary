@@ -56,13 +56,14 @@ public class BoardController {
     @PostMapping("/boards/new")
     public String create(@AuthenticationPrincipal PrincipalDetails userDetails,
                          @RequestParam(name = "boardForm") String boardForm,
-                         @RequestParam(name = "files") List<MultipartFile> file
+                         @RequestParam(name = "files", required = false) List<MultipartFile> file,
+                         @RequestParam(name = "removeFile",required = false) String removeFile
     ) throws Exception{
         ObjectMapper mapper = new ObjectMapper();
         BoardForm boardForm1 = mapper.readValue(boardForm,BoardForm.class);
         boardForm1.setCreateId(userDetails.getUser().getUsername());
         List<MultipartFile> multipartFiles = file.stream().filter(e -> e.getSize() > 0).toList();
-        boardService.saveBoard(boardForm1, multipartFiles);
+        boardService.saveBoard(boardForm1, multipartFiles,removeFile);
         return "redirect:/boards";
     }
 

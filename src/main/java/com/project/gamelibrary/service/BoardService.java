@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -23,7 +24,7 @@ public class BoardService {
     private final FileRepository fileRepository;
     private final FileHandler fileHandler;
     @Transactional
-    public void saveBoard(BoardForm boardForm, List<MultipartFile> files) throws Exception {
+    public void saveBoard(BoardForm boardForm, List<MultipartFile> files,String removeFile) throws Exception {
         // Insert
         Board board = boardForm.toEntity();
         Long boardId;
@@ -34,7 +35,10 @@ public class BoardService {
         } else {
             boardId = boardRepository.save(boardForm.toEntity());
         }
-        log.info("files :[{}]", files);
+        if (removeFile != null && !removeFile.equals("")){
+            Arrays.stream(removeFile.split(","))
+                    .forEach(e->fileRepository.deleteById(Long.parseLong(e)));
+        }
         List<Files> fileList = fileHandler.parseFileInfo(files);
         board = boardRepository.findOne(boardId);
         if(!fileList.isEmpty()) {

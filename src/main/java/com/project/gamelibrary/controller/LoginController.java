@@ -4,6 +4,7 @@ import com.project.gamelibrary.Form.UserForm;
 import com.project.gamelibrary.config.auth.PrincipalDetails;
 import com.project.gamelibrary.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,10 +13,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -51,7 +49,7 @@ public class LoginController {
 
     @GetMapping("/joinForm")
     public String joinForm(Model model) {
-        model.addAttribute("userForm",new UserForm());
+        model.addAttribute("userForm",new UserForm(null,null,null,null));
         return "joinForm";
     }
 
@@ -68,9 +66,11 @@ public class LoginController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/info")
-    public @ResponseBody String info() {
-        return "개인정보";
+    @GetMapping("/users")
+    public String info(@RequestParam(defaultValue = "0") int pageNumber, Model model) {
+        Page<UserForm> userFormPage = userService.select(pageNumber,5);
+        model.addAttribute("userList", userFormPage);
+        return "users/userList";
     }
 
     @GetMapping("/user")

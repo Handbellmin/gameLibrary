@@ -5,17 +5,42 @@ import com.project.gamelibrary.domain.User;
 import com.project.gamelibrary.repository.UserRepository;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-
+    public Page<UserForm> select(int pageNumber, int pageSize){
+        PageRequest pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC,("username")));
+        Page<User> userPage = userRepository.findAll(pageable);
+        return userPage.map(m ->new UserForm(m.getUsername(), m.getPassword(), m.getUserNickName(), m.getUserRole()));
+    }
+    public void printUsers() {
+        int pageNumber = 0;
+        int pageSize = 3;
+        Page<UserForm> userPages = select(pageNumber, pageSize);
+        while(true) {
+            List<UserForm> users = userPages.getContent();
+            for(UserForm user : users) {
+                System.out.println(user.getUsername());
+                System.out.println(pageNumber);
+            }
+            if(!userPages.hasNext()){
+                break;
+            }
+            pageNumber++;
+            userPages = select(pageNumber,pageSize);
+        }
+    }
     public void register(UserForm userForm) {
         User user = new User.Builder(userForm.getUsername(), userForm.getPassword())
                 .setUserNickName(userForm.getNickname())

@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container">
+  <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+  <div>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>사용자 이름</th>
+        <th>사용자 닉네임</th>
+        <th>사용자 권한</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr th:each="user : ${userList.content}">
+          <td th:text="${user.username}"></td>
+          <td th:text="${user.nickname}"></td>
+          <td th:text="${user.userRole}"></td>
+      </tr>
+      </tbody>
+    </table>
+    <div style="text-align:center" th:if="${userList.totalPages > 1}">
+      <span th:each="i : ${#numbers.sequence(0, userList.totalPages - 1)}">
+            <a class="btn btn-lg btn-secondary" th:href="@{/users(pageNumber=${i})}" th:text="${i}"></a>
+        </span>
+    </div>
+  </div>
+  <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+</body>
+</html>
