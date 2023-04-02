@@ -2,6 +2,7 @@ package com.project.gamelibrary.service;
 
 import com.project.gamelibrary.Form.UserForm;
 import com.project.gamelibrary.domain.User;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -36,5 +37,18 @@ class UserServiceTest {
         userService.printUsers();
         //then
     }
+    
+    @Test
+    public void existTest() throws Exception {
+        //given
+        UserForm user1 = new UserForm("aa","aa","aa","ROLE_USER");
+        userService.register(user1);
+        //when
+        UserForm user2 = new UserForm("aa","aa","bb","ROLE_USER");
+        userService.register(user2);
+        //then
+
+    }
+        
 
 }

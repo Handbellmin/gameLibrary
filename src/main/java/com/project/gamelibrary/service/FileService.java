@@ -1,20 +1,23 @@
 package com.project.gamelibrary.service;
 
 import com.project.gamelibrary.Form.BoardForm;
-import com.project.gamelibrary.Form.FileForm;
 import com.project.gamelibrary.domain.Files;
 import com.project.gamelibrary.repository.FileRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
+import org.hibernate.result.Output;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
-import java.io.InputStream;
-import java.time.LocalDateTime;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.DateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -29,6 +32,10 @@ public class FileService {
         return fileRepository.findByBoardId(boardId);
     }
 
+    public Optional<Files> findById(Long fileId) {
+        return fileRepository.findById(fileId);
+    }
+
     @Transactional
     public void saveFile(BoardForm boardForm) throws Exception {
 
@@ -36,5 +43,27 @@ public class FileService {
     @Transactional
     public Long insertFile(Files files){
         return fileRepository.save(files).getId();
+    }
+
+    public void downloadFile(Long fileId, HttpServletResponse response) throws IOException {
+        Optional<Files> file = findById(fileId);
+        if(file.isPresent()){
+            String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
+            String filePath = absolutePath + "files" + File.separator +file.get().getRegDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+            String filename = file.get().getSavedFileName();
+            File f = new File(filePath,filename);
+            response.setContentType("application/download");
+            response.setContentLength((int)f.length());
+            response.setHeader("Content-disposition","attachment;filename=\"" + file.get().getOriginFileName() + "\"");
+            OutputStream os = response.getOutputStream();
+            FileInputStream fileInputStream = new FileInputStream(f);
+            FileCopyUtils.copy(fileInputStream,os);
+            fileInputStream.close();
+            os.close();
+        }
+        else {
+            log.error("파일다운로드 실패");
+            return;
+        }
     }
 }

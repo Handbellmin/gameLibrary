@@ -19,7 +19,7 @@ public class BoardCommentController {
     @ResponseBody
     @PostMapping("/boardcmt/{id}/add")
     public void addComment(@PathVariable("id") Long BoardId) {
-        Board board = boardService.findOne(BoardId);
+
 
     }
 }

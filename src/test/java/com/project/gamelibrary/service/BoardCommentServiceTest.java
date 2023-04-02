@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @SpringBootTest
 @Transactional
 public class BoardCommentServiceTest {
@@ -35,8 +37,8 @@ public class BoardCommentServiceTest {
         boardForm.setContent("content");
         boardForm.setPopupYn("N");
 
-        Board asBoard = boardService.findOne(1L);
-        Assertions.assertEquals(asBoard.getContent(),"content");
+        Optional<Board> board = boardService.findOne(1L);
+        Assertions.assertEquals(board.get().getContent(),"content");
 
     }
         

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 
@@ -54,9 +55,13 @@ public class LoginController {
     }
 
     @PostMapping("/join") //redirect를 붙이면 getMapping 옆 매핑 Url 실행
-    public String join(@Valid @ModelAttribute UserForm userForm,BindingResult bindingResult, Model model) {
+    public String join(@Valid @ModelAttribute UserForm userForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if(bindingResult.hasErrors()){
             return "joinForm";
+        }
+        if (userService.existsUsername(userForm.getUsername())){
+            redirectAttributes.addFlashAttribute("error","중복된 아이디입니다.");
+            return "redirect:/joinForm";
         }
         String rawPassword = userForm.getPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);

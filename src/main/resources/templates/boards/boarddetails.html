@@ -5,24 +5,21 @@
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
     <div>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>제목</th>
-                <th>내용</th>
-                <th>작성자</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td th:text="${board.ttl}">제목</td>
-                <td th:text="${board.createId}">작성자</td>
-            </tr>
-            </tbody>
-        </table>
-        <p class="lead text-muted">
-            <span th:text="${board.content}">내용입니다.</span>
-        </p>
+            <div>
+                <p id="ttl" th:text="${board.ttl}">제목입니다.</p>
+            </div>
+            <div>
+                <p id="boardCategory" th:text="${boardCategories}">카테고릐</p>
+            </div>
+            <div id="content">
+                <p th:utext="${board.content}">내용입니다.</p>
+            </div>
+            <div class="mb-3">
+                <li style ="height: 58px" th:each="file : ${files}" th:if="${file.id ne null}">
+                    <a th:text="${file.originFileName}" th:href="@{/fileDownload/{id}(id = ${file.id})}">hwp</a>
+                </li>
+            </div>
+            <a class="btn btn-primary" th:href="@{/boards (pageNumber=${pageNumber})}" value="목록">목록</a>
     </div>
     <div th:replace="fragments/footer :: footer"/>
 </div> <!-- /container -->

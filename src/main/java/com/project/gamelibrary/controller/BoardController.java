@@ -15,6 +15,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.Path;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +32,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -39,10 +44,10 @@ public class BoardController {
     private final FileService fileService;
 
     @GetMapping("/boards")
-    public String boardList(Model model){
-        List<Board> boardList = boardService.findAll();
+    public String boardList(@RequestParam(defaultValue = "0") int pageNumber, Model model){
+        Page<Board> boards = boardService.findAllPage(pageNumber, 10);
+        model.addAttribute("boardList",boards);
 
-        model.addAttribute("boards",boardList);
         return "/boards/boardList";
     }
 
@@ -69,25 +74,27 @@ public class BoardController {
 
     @GetMapping("/boards/{id}/edit")
     public String editForm(@PathVariable("id") Long BoardId, Model model){
-        Board board = boardService.findOne(BoardId);
+        Optional<Board> board = boardService.findOne(BoardId);
         model.addAttribute("boardCategories", boardCategoryService.findAll());
-        model.addAttribute("boardForm", board);
+        model.addAttribute("boardForm", board.get());
         model.addAttribute("files", fileService.findByboardId(BoardId));
 
         return "/boards/createBoardForm";
     }
 
     @GetMapping("/boards/{id}/detail")
-    public String detail(@PathVariable ("id") Long BoardId, Model model) {
-        Board board = boardService.findOne(BoardId);
+    public String detail(@PathVariable ("id") Long BoardId,
+                         @RequestParam(defaultValue = "0") int pageNumber,
+                         Model model) {
+        Optional<Board> board = boardService.findOne(BoardId);
         List<BoardComment> boardComments = boardCommentService.findAllByBoardId(BoardId);
 
-        model.addAttribute("board", board);
+        model.addAttribute("board", board.get());
         model.addAttribute("boardComments", boardComments);
-
-        return "/boards/details";
+        model.addAttribute("files", fileService.findByboardId(BoardId));
+        model.addAttribute("pageNumber",pageNumber);
+        return "/boards/boarddetails";
     }
-
     @PostMapping(value="smarteditorMultiImageUpload")
     public void smarteditorImageUpload(HttpServletRequest request, HttpServletResponse response) {
         String sFileInfo = "";
@@ -96,7 +103,14 @@ public class BoardController {
         sFilenameExt = sFilenameExt.toLowerCase();
 
         String[] whiteChk = {"jpg","png","bmp","gif"};
-
-
+    }
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/fileDownload/{id}")
+    public void fileDownlaod(@PathVariable ("id") Long fileId, HttpServletResponse response) {
+        try {
+            fileService.downloadFile(fileId, response);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

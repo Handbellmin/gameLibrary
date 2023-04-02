@@ -1,31 +1,12 @@
 package com.project.gamelibrary.repository;
 
-import com.project.gamelibrary.Form.BoardForm;
 import com.project.gamelibrary.domain.Board;
-import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
-
-@Repository
-@RequiredArgsConstructor
-public class BoardRepository {
-    private final EntityManager em;
-
-    public Long save(Board board) {
-        em.persist(board);
-        return board.getId();
-    }
-
-    public Board findOne(Long boardId) {
-        return em.find(Board.class, boardId);
-    }
-
-    public List<Board> findAll() {
-        return em.createQuery("select b from Board b", Board.class)
-                .getResultList();
-    }
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.CrudRepository;
 
 
+
+public interface BoardRepository extends CrudRepository<Board,Long> {
+    Page<Board> findAll(Pageable pageable);
 }

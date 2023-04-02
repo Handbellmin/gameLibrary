@@ -16,18 +16,25 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="board : ${boards}">
+            <tr th:each="board : ${boardList}">
                 <td th:text="${board.id}"></td>
                 <td th:text="${board.ttl}"></td>
-                <td th:utext="${board.content}"></td>
+                <td>
+                    <a th:href="@{/boards/{id}/detail(id=${board.id},pageNumber=${param.pageNumber})}" th:utext="${board.content}"></a>
+                </td>
                 <td th:text="${board.createId}"></td>
                 <td>
-                    <a href="#" th:href="@{/boards/{id}/edit (id=${board.id})}"
+                    <a href="#" th:href="@{/boards/{id}/edit (id=${board.id},pageNumber=${param.pageNumber})}"
                        class="btn btn-primary" role="button">수정</a>
                 </td>
             </tr>
             </tbody>
         </table>
+        <div style="text-align:center" th:if="${boardList.totalPages > 1}">
+        <span th:each="i : ${#numbers.sequence(0, boardList.totalPages - 1)}">
+            <a class="btn btn-lg btn-secondary" th:href="@{/boards(pageNumber=${i})}" th:text="${i}"></a>
+        </span>
+        </div>
     </div>
     <div th:replace="fragments/footer :: footer"/>
 </div> <!-- /container -->
