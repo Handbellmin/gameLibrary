@@ -61,7 +61,7 @@ public class FileHandler {
                 FileForm fileForm = FileForm.builder()
                         .originFileName(originalName)
                         .savedFileName(savedFileName)
-                        .uploadDir(uploadDir)
+                        .uploadDir(absolutePath+path)
                         .extension(originalFileExtension)
                         .fileSize(multipartFile.getSize())
                         .contentType(conetentType)

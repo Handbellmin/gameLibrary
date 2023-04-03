@@ -23,7 +23,7 @@
                 processData: false,
                 contentType: false,
                 success: function (response) {
-                    $("#thumbnail-preview").attr("src", response);
+                    $("#thumbnail-preview").attr("src", "data:image/png;base64,"+response);
                     console.log(response);
                 },
                 error: function (e) {
@@ -53,7 +53,7 @@
     </div>
     <div>
         <label>미리보기:</label>
-        <img id="thumbnail-preview" th:if="${thumbnail != null}" th:src="@{|/uploads/${thumbnail}|}">
+        <img id="thumbnail-preview"  th:src="@{/uploads/${thumbnail}|}">
     </div>
     <button type="submit">등록</button>
 </form>

@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 
 @Slf4j
@@ -16,6 +17,7 @@ public class ItemService {
     private final FileHandler fileHandler;
     public String createPreview(List<MultipartFile> images) throws Exception {
         List<Files> image = fileHandler.parseFileInfo(images);
-        return image.get(0).getFilePath();
+
+        return image.get(0).getUploadDir()+ File.separator+image.get(0).getSavedFileName();
     }
 }
