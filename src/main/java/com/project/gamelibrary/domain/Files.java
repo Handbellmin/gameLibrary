@@ -29,6 +29,8 @@ public class Files {
     private Long fileSize;
     private LocalDateTime regDate;
 
+    @OneToOne(mappedBy = "thumbnail")
+    private Item item;
 
 
     public static class Builder {

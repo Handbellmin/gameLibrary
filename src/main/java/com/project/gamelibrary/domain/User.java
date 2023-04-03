@@ -36,6 +36,9 @@ public class User {
     @Embedded
     private Address address;
 
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders = new ArrayList<>();
+
     private String provider;
     private String providerId;
 

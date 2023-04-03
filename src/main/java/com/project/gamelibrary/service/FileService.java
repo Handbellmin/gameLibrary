@@ -36,15 +36,6 @@ public class FileService {
         return fileRepository.findById(fileId);
     }
 
-    @Transactional
-    public void saveFile(BoardForm boardForm) throws Exception {
-
-    }
-    @Transactional
-    public Long insertFile(Files files){
-        return fileRepository.save(files).getId();
-    }
-
     public void downloadFile(Long fileId, HttpServletResponse response) throws IOException {
         Optional<Files> file = findById(fileId);
         if(file.isPresent()){

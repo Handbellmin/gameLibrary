@@ -25,5 +25,8 @@ public class Item {
     private int stockQuantity;
 
     private LocalDateTime createDate;
+    @OneToOne
+    @JoinColumn(name="files_id")
+    private Files thumbnail;
 
 }
