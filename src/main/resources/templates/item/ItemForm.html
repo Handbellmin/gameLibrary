@@ -5,33 +5,6 @@
     <title>주문 상품 등록</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
-<script type="text/javascript">
-        $(document).ready(function() {
-            $("#thumbnail").change(function () {
-                uploadImage();
-            });
-        });
-        fileList = []
-        function uploadImage() {
-            var fileData = new FormData();
-            fileData.append("file", $("#thumbnail")[0].files[0]);
-            console.log(fileData);
-            $.ajax({
-                url: "/thumbnail/upload",
-                type: "POST",
-                data: fileData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    $("#thumbnail-preview").attr("src", "data:image/png;base64,"+response);
-                    console.log(response);
-                },
-                error: function (e) {
-                    console.log(e);
-                }
-            });
-        }
-    </script>
 <body>
 <div th:replace="fragments/bodyHeader :: bodyHeader" />
 <form method="post" th:object="${orderItemForm}" enctype="multipart/form-data">
@@ -41,6 +14,24 @@
     </div>
     <div>
         <label for="price">가격:</label>
+        <script type="text/javascript">
+        $(document).ready(function() {
+            $("#thumbnail").change(function () {
+                uploadImage();
+            });
+        });
+        function uploadImage(input) {
+            if(input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+               document.getElementById('thumbnail-preview').src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+            } else {
+            document.getElementById('thumbnail-preview').src = "";
+            }
+        }
+    </script>
         <input type="number" id="price" name="price" th:field="*{price}">
     </div>
     <div>
@@ -49,11 +40,11 @@
     </div>
     <div>
         <label for="thumbnail">섬네일:</label>
-        <input type="file" id="thumbnail" name="thumbnail">
+        <input type="file" onchange="uploadImage(this)" id="thumbnail" name="thumbnail">
     </div>
     <div>
         <label>미리보기:</label>
-        <img id="thumbnail-preview"  th:src="@{/uploads/${thumbnail}|}">
+        <img id="thumbnail-preview">
     </div>
     <button type="submit">등록</button>
 </form>

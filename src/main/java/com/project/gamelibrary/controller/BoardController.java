@@ -5,14 +5,13 @@ import com.project.gamelibrary.Form.BoardForm;
 import com.project.gamelibrary.config.auth.PrincipalDetails;
 import com.project.gamelibrary.domain.Board;
 import com.project.gamelibrary.domain.BoardComment;
-import com.project.gamelibrary.domain.Files;
 import com.project.gamelibrary.service.BoardCategoryService;
 import com.project.gamelibrary.service.BoardCommentService;
 import com.project.gamelibrary.service.BoardService;
 import com.project.gamelibrary.service.FileService;
+import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.ws.rs.Path;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,7 +26,16 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartRequest;
 
+import javax.imageio.ImageIO;
 import javax.validation.Valid;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,12 +103,21 @@ public class BoardController {
         model.addAttribute("pageNumber",pageNumber);
         return "/boards/boarddetails";
     }
-    @PostMapping(value="smarteditorMultiImageUpload")
-    public void smarteditorImageUpload(HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping(value="/singleImageUploader")
+    public void smarteditorImageUpload(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String sFileInfo = "";
         String sFilename = request.getHeader("file-name");
         String sFilenameExt = sFilename.substring(sFilename.lastIndexOf(".")+1);
         sFilenameExt = sFilenameExt.toLowerCase();
+        ServletInputStream inputStream = request.getInputStream();
+        byte[] bytes = new byte[1024];
+        System.out.println("inputStream 확인 :" + sFilename);
+        System.out.println("inputStream 확인 :" + inputStream);
+
+        Files.copy(inputStream, Paths.get("/src/resources/img/"));
+        inputStream.close();
+
+
 
         String[] whiteChk = {"jpg","png","bmp","gif"};
     }

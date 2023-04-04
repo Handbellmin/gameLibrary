@@ -3,11 +3,16 @@ package com.project.gamelibrary.controller;
 import com.project.gamelibrary.Form.ItemForm;
 import com.project.gamelibrary.Form.OrderItemForm;
 import com.project.gamelibrary.service.ItemService;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.h2.util.IOUtils;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +24,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,15 +49,17 @@ public class ItemController {
 
     @PostMapping("/thumbnail/upload")
     @ResponseBody
-    public ResponseEntity<Resource> uploadThumbnail(@RequestParam(name = "file") List<MultipartFile> image) throws Exception {
+    public void uploadRThumbnail(@RequestParam(name = "file") List<MultipartFile> image,
+                                    HttpServletResponse response
+    ) throws Exception {
         //미리보기 제작
-
-        String previewPath = itemService.createPreview(image);
-        Resource resource = (Resource) new FileSystemResource(previewPath);
+        /*FileSystemResource fileSystemResource = new FileSystemResource(preview);
+        response.setContentType("image/gif");
         HttpHeaders headers = new HttpHeaders();
         Path filePath = null;
-        filePath = Paths.get(previewPath);
+        filePath = Paths.get(preview);
         headers.add("Content-Type", Files.probeContentType(filePath));
-        return new ResponseEntity<Resource>(resource,headers, HttpStatus.OK);
+        System.out.println(filePath);
+        return new ResponseEntity<FileSystemResource>(fileSystemResource, headers, HttpStatus.OK);*/
     }
 }
