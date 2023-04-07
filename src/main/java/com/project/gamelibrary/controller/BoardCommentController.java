@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Optional;
+
 @Controller
 @RequiredArgsConstructor
 public class BoardCommentController {
@@ -19,7 +21,11 @@ public class BoardCommentController {
     @ResponseBody
     @PostMapping("/boardcmt/{id}/add")
     public void addComment(@PathVariable("id") Long BoardId) {
+        Optional<Board> board = boardService.findOne(BoardId);
+
+
 
 
     }
+
 }
