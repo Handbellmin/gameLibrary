@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.yaml.snakeyaml.scanner.ScannerImpl;
 
 import java.time.LocalDateTime;
 
@@ -29,4 +30,26 @@ public class Item {
     @JoinColumn(name="files_id")
     private Files thumbnail;
 
+    public static class Builder {
+        private final Category category;
+        private final String name;
+        private final int price;
+        private final int stockQuantity;
+
+        public Builder(Category category, String name, int price, int stockQuantity) {
+            this.category = category;
+            this.name = name;
+            this.price = price;
+            this.stockQuantity = stockQuantity;
+        }
+        public Item build() { return new Item(this);}
+    }
+    protected Item() {}
+
+    private Item(Builder builder) {
+        this.category = builder.category;
+        this.name = builder.name;
+        this.price = builder.price;
+        this.stockQuantity = builder.stockQuantity;
+    }
 }

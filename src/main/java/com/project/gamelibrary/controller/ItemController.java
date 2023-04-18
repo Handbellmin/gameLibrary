@@ -1,5 +1,6 @@
 package com.project.gamelibrary.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.gamelibrary.Form.ItemForm;
 import com.project.gamelibrary.Form.OrderItemForm;
 import com.project.gamelibrary.service.ItemService;
@@ -30,6 +31,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -37,14 +39,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemController {
     private final ItemService itemService;
+
     @GetMapping("/item/add")
     public String setOrderItemForm(Model model) {
         model.addAttribute("orderItemForm" , new ItemForm());
         return "/item/ItemForm";
     }
     @PostMapping("/item/add")
-    public String addOrderItem() {
-        return "";
+    public String addOrderItem(@RequestParam(name="file") List<MultipartFile> image,
+                               @RequestParam(name = "ItemForm") String ItemForm
+    ) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        ItemForm itemForm_new = mapper.readValue(ItemForm, ItemForm.class);
+        itemForm_new.setCreateDate(LocalDateTime.now());
+        itemService.createItem(itemForm_new);
+        return "redirect:/items";
     }
 
     @PostMapping("/thumbnail/upload")

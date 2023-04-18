@@ -2,6 +2,7 @@ package com.project.gamelibrary.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.gamelibrary.Form.BoardForm;
+import com.project.gamelibrary.Handler.FileHandler;
 import com.project.gamelibrary.config.auth.PrincipalDetails;
 import com.project.gamelibrary.domain.Board;
 import com.project.gamelibrary.domain.BoardComment;
@@ -99,12 +100,15 @@ public class BoardController {
         return "/boards/boarddetails";
     }
     @RequestMapping(value="/singleImageUploader")
-    public void smarteditorImageUpload(@RequestParam("file") List<MultipartFile> imgs, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void smarteditorImageUpload(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
+
             //파일정보
             String sFileInfo = "";
-            //파일명을 받는다 - 일반 원본파일명
-            System.out.println(request.getPart("file"));
+            HttpServletRequest streamRequest = request;
+            ServletInputStream inputStream = streamRequest.getInputStream();
+            System.out.println("request : " + inputStream);
+            System.out.println("request : " + inputStream.read());
             String filename = request.getHeader("file-name");
             //파일 확장자
             String filename_ext = filename.substring(filename.lastIndexOf(".") + 1);
@@ -145,17 +149,15 @@ public class BoardController {
                 realFileNm = today + UUID.randomUUID().toString() + filename.substring(filename.lastIndexOf("."));
                 String rlFileNm = filePath + realFileNm;
                 ///////////////// 서버에 파일쓰기 /////////////////
-                InputStream is = request.getInputStream();
+                //inputstream이 비어있음
                 OutputStream os = new FileOutputStream(rlFileNm);
                 int numRead;
                 byte b[] = new byte[Integer.parseInt(request.getHeader("file-size"))];
-                while ((numRead = is.read(b, 0, b.length)) != -1) {
+                while ((numRead = request.getInputStream().read(b, 0, b.length)) != -1) {
                     os.write(b, 0, numRead);
                 }
-                if (is != null) {
-                    System.out.println("inputStream 없음 ;");
-                    is.close();
-                }
+
+
                 os.flush();
                 os.close();
                 ///////////////// 서버에 파일쓰기 /////////////////
@@ -164,7 +166,6 @@ public class BoardController {
                 sFileInfo += "&bNewLine=true";
                 // img 태그의 title 속성을 원본파일명으로 적용시켜주기 위함
                 sFileInfo += "&sFileName=" + filename;
-                ;
                 sFileInfo += "&sFileURL=" + "/resources/editor/multiupload/" + realFileNm;
                 PrintWriter print = response.getWriter();
                 print.print(sFileInfo);

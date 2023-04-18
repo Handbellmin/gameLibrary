@@ -1,6 +1,8 @@
 package com.project.gamelibrary.config;
 
+import com.project.gamelibrary.config.filter.Myfilter;
 import com.project.gamelibrary.config.oauth.PrincipalOauth2UserService;
+import com.project.gamelibrary.controller.BoardController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +11,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.preauth.websphere.WebSpherePreAuthenticatedProcessingFilter;
+import org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter;
 
 @Configuration
 @EnableWebSecurity
