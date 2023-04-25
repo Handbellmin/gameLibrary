@@ -44,7 +44,7 @@ public class BoardService {
             Arrays.stream(removeFile.split(","))
                     .forEach(e->fileRepository.deleteById(Long.parseLong(e)));
         }
-        List<Files> fileList = fileHandler.parseFileInfo(files);
+        List<Files> fileList = fileHandler.parseFileInfo(files, false);
         board = findOne(boardId).get();
         if(!fileList.isEmpty()) {
             for (Files file : fileList) {

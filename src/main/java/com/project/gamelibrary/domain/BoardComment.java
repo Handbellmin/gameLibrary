@@ -27,11 +27,37 @@ public class BoardComment {
 
     private LocalDateTime updateDate;
 
-    public BoardCommentBuilder builder(String cmtContent) {
-        if(cmtContent == null){
-            throw new IllegalArgumentException("필수 파라미터 누락");
+    public static class Builder {
+        private final Board board;
+        private final String cmtContent;
+        private final String createId;
+        private LocalDateTime createDate;
+        private LocalDateTime updateDate;
+
+        public Builder(Board board, String cmtContent, String createId, LocalDateTime createDate) {
+            this.board = board;
+            this.cmtContent = cmtContent;
+            this.createId = createId;
+            this.createDate = createDate;
         }
-        return new BoardCommentBuilder().cmtContent(cmtContent);
+
+        public Builder setUpdateDate() {
+            this.updateDate = LocalDateTime.now();
+            return this;
+        }
+        public BoardComment build() {
+            return new BoardComment(this);
+        }
+    }
+    protected BoardComment() {}
+
+    private BoardComment(Builder builder){
+        this.board = builder.board;
+        this.cmtContent = builder.cmtContent;
+        this.createId = builder.createId;
+        this.createDate = builder.createDate;
+        this.updateDate = builder.updateDate;
+
     }
 
 }

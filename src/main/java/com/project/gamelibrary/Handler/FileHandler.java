@@ -10,6 +10,9 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,7 +27,7 @@ public class FileHandler {
     private final FileService fileService;
 
     public List<Files> parseFileInfo(
-            List<MultipartFile> multipartFiles) throws Exception {
+            List<MultipartFile> multipartFiles, Boolean thumbnailYn) throws Exception {
         // 반환할 파일 리스트
         List<Files> fileList = new ArrayList<>();
         // 전달된 파일이 null이 아닌경우
@@ -69,7 +72,17 @@ public class FileHandler {
                         .build();
                 Files files = fileForm.toEntity();
                 fileList.add(files);
-                file = new File(absolutePath + path + File.separator + savedFileName);
+                if(!thumbnailYn) {
+                    file = new File(absolutePath + path + File.separator + savedFileName);
+                }else {
+                    int thumbnailWidth = 100;
+                    int thumbnailHeight = 100;
+                    BufferedImage originalImage = ImageIO.read(file);
+
+                    BufferedImage thumbnailImage = new BufferedImage(thumbnailWidth,thumbnailHeight,BufferedImage.TYPE_INT_RGB);
+                    thumbnailImage.createGraphics().drawImage(originalImage.getScaledInstance(thumbnailWidth, thumbnailHeight, Image.SCALE_SMOOTH),0,0,null);
+                    ImageIO.write(thumbnailImage, "jpg", new File(path));
+                }
                 multipartFile.transferTo(file);
 
                 // 파일 권한 설정(쓰기, 읽기)

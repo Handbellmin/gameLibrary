@@ -1,13 +1,18 @@
 package com.project.gamelibrary.Handler;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class ThumbnailHandler {
 
-    public void createThumbnail() {
+    public void createThumbnail(
+            List<MultipartFile> multipartFileList
+    ) throws Exception {
         String imagePath = "이미지 파일 경로";
         String thumbnailPath = "썸네일 파일 경로";
         int thumbnailWidth = 100; // 썸네일 이미지의 폭

@@ -21,7 +21,7 @@ public class ItemService {
     final private ItemRepository itemRepository;
     private final FileHandler fileHandler;
     public String createPreview(List<MultipartFile> images) throws Exception {
-        List<Files> image = fileHandler.parseFileInfo(images);
+        List<Files> image = fileHandler.parseFileInfo(images,true);
 
         return image.get(0).getUploadDir()+ File.separator+image.get(0).getSavedFileName();
     }

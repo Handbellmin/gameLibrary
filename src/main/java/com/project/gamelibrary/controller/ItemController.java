@@ -53,6 +53,7 @@ public class ItemController {
         ItemForm itemForm_new = mapper.readValue(ItemForm, ItemForm.class);
         itemForm_new.setCreateDate(LocalDateTime.now());
         itemService.createItem(itemForm_new);
+
         return "redirect:/items";
     }
 

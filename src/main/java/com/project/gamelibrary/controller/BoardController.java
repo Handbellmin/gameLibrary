@@ -80,7 +80,7 @@ public class BoardController {
     public String editForm(@PathVariable("id") Long BoardId, Model model){
         Optional<Board> board = boardService.findOne(BoardId);
         model.addAttribute("boardCategories", boardCategoryService.findAll());
-        model.addAttribute("boardForm", board.get());
+        board.ifPresent(value -> model.addAttribute("boardForm", value));
         model.addAttribute("files", fileService.findByboardId(BoardId));
 
         return "/boards/createBoardForm";
