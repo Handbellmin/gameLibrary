@@ -99,6 +99,15 @@ public class BoardController {
         model.addAttribute("pageNumber",pageNumber);
         return "/boards/boarddetails";
     }
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/fileDownload/{id}")
+    public void fileDownlaod(@PathVariable ("id") Long fileId, HttpServletResponse response) {
+        try {
+            fileService.downloadFile(fileId, response);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     @RequestMapping(value="/singleImageUploader")
     public void smarteditorImageUpload(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
@@ -173,15 +182,6 @@ public class BoardController {
                 print.close();
             }
         } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping("/fileDownload/{id}")
-    public void fileDownlaod(@PathVariable ("id") Long fileId, HttpServletResponse response) {
-        try {
-            fileService.downloadFile(fileId, response);
-        }catch (Exception e){
             e.printStackTrace();
         }
     }
