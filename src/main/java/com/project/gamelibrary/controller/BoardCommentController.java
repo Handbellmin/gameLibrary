@@ -1,6 +1,5 @@
 package com.project.gamelibrary.controller;
 
-import com.project.gamelibrary.Form.BoardCommentForm;
 import com.project.gamelibrary.domain.Board;
 import com.project.gamelibrary.service.BoardCommentService;
 import com.project.gamelibrary.service.BoardService;
@@ -25,6 +24,6 @@ public class BoardCommentController {
             //댓글 저장
             boardCommentService.saveBoardComment(boardCmtForm);
         }
-        
+
     }
 }
