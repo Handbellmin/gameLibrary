@@ -19,6 +19,31 @@
                     <a th:text="${file.originFileName}" th:href="@{/fileDownload/{id}(id = ${file.id})}">hwp</a>
                 </li>
             </div>
+            <div class="mb-3">
+                <h2>댓글</h2>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>작성자</th>
+                        <th>내용</th>
+                        <th>작성일자</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="cmt : ${boardComments}">
+                            <td th:text="${cmt.createId}"></td>
+                            <td th:text="${cmt.cmtContent}"></td>
+                            <td th:text="${#temporals.format(cmt.createDate,'yyyy-MM-dd HH:mm:ss')}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <form th:action="@{/boardCmt/{id}/add(id=${board.id})}" th:obejct="${boardCmt}" method="post">
+            <div>
+                <textarea id="cmtContent" th:field="*{boardCmt.cmtContent}" style="width:100%;" rows="10" cols="110" placeholder="댓글을 입력해주세요."></textarea>
+                <button style="float:right;" type="submit" class="btn btn-primary">Submit</button>
+            </div>
+            </form>
             <a class="btn btn-primary" th:href="@{/boards (pageNumber=${pageNumber})}" value="목록">목록</a>
     </div>
     <div th:replace="fragments/footer :: footer"/>

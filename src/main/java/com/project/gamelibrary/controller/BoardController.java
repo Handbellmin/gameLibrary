@@ -1,6 +1,7 @@
 package com.project.gamelibrary.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.gamelibrary.Form.BoardCommentForm;
 import com.project.gamelibrary.Form.BoardForm;
 import com.project.gamelibrary.Handler.FileHandler;
 import com.project.gamelibrary.config.auth.PrincipalDetails;
@@ -95,6 +96,7 @@ public class BoardController {
 
         model.addAttribute("board", board.get());
         model.addAttribute("boardComments", boardComments);
+        model.addAttribute("boardCmt", new BoardCommentForm());
         model.addAttribute("files", fileService.findByboardId(BoardId));
         model.addAttribute("pageNumber",pageNumber);
         return "/boards/boarddetails";
